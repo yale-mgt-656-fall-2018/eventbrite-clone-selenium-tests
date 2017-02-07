@@ -2,53 +2,70 @@ package tests
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	goselenium "github.com/bunsenapp/go-selenium"
+	"github.com/yale-cpsc-213/social-todo-selenium-tests/tests/selectors"
 )
 
 // Run - run all tests
 //
-func Run(driver goselenium.WebDriver, testURL string, verbose bool) (int, int, error) {
-
+func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast bool) (int, int, error) {
+	numPassed := 0
+	numFailed := 0
 	doLog := func(args ...interface{}) {
 		if verbose {
 			fmt.Println(args...)
 		}
 	}
+	logTestResult := func(passed bool, err error, testDesc string) {
+		doLog(statusText(passed && (err == nil)), "-", testDesc)
+		if passed && err == nil {
+			numPassed++
+		} else {
+			numFailed++
+			if failFast {
+				log.Fatalln("Found first failing test, quitting")
+			}
+		}
+	}
 
-	// Navigate to the HackerNews website.
+	users := []User{
+		randomUser(),
+		randomUser(),
+		randomUser(),
+	}
+
+	doLog("Your site")
+
+	// Navigate to the URL.
 	_, err := driver.Go(testURL)
-	if err != nil {
-		doLog(err)
-		return 0, 0, err
+	logTestResult(true, err, "Should be up and running")
+
+	getEl := func(sel string) (goselenium.Element, error) {
+		return driver.FindElement(goselenium.ByCSSSelector(sel))
+	}
+	checkEl := func(sel string) error {
+		_, err = getEl(sel)
+		return err
 	}
 
-	// Click the 'new' link at the top
-	el, err := driver.FindElement(goselenium.ByCSSSelector("a[href='newest']"))
-	if err != nil {
-		fmt.Println(err)
-		return 0, 0, err
+	err = checkEl(selectors.LoginForm)
+	logTestResult(true, err, "Should have a login form")
+
+	err = checkEl(selectors.RegisterForm)
+	logTestResult(true, err, "Should have a registration form")
+
+	err = submitForm(driver, selectors.LoginForm, users[0].loginFormData(), selectors.LoginFormSubmit)
+	time.Sleep(2000 * time.Millisecond)
+
+	return numPassed, numFailed, err
+}
+
+func statusText(pass bool) string {
+	if pass {
+		return "✅ PASS"
 	}
-
-	// Click the link.
-	_, err = el.Click()
-	if err != nil {
-		fmt.Println(err)
-		return 0, 0, err
-	}
-
-	// Wait until the URL has changed with a timeout of 1 second and a check
-	// interval of 10ms..
-	newLink := "https://news.ycombinator.com/newest"
-	ok := driver.Wait(goselenium.UntilURLIs(newLink), 1*time.Second, 10*time.Millisecond)
-	if !ok {
-		fmt.Println("Wait timed out :<")
-		return 0, 0, err
-	}
-
-	// Woohoo! We have successfully navigated to a page.
-	fmt.Println("Successfully navigated to URL " + newLink)
-	return 0, 0, err
-
+	return "❌ FAIL"
 }

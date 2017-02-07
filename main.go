@@ -58,5 +58,5 @@ func doRun(seleniumURL string, testURL string) {
 	// Delete the session once this function is completed.
 	defer driver.DeleteSession()
 
-	todotests.Run(driver, testURL, true)
+	todotests.Run(driver, testURL, true, true)
 }
