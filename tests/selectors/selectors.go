@@ -16,5 +16,10 @@ const (
 	RegisterFormName                 = "form.register input[name=\"name\"]"
 	RegisterFormPassword             = "form.register input[name=\"password\"]"
 	RegisterFormPasswordConfirmation = "form.register input[name=\"passwordConfirmation\"]"
-	NewTodoForm                      = "form.create-task"
+	TaskForm                         = "form.createTask"
+	TaskFormName                     = "form.createTask input[name=\"name\"]"
+	TaskFormDescription              = "form.createTask input[name=\"description\"]"
+	TaskFormCollaborator1            = "form.createTask input[name=\"collaborator1\"]"
+	TaskFormCollaborator2            = "form.createTask input[name=\"collaborator2\"]"
+	TaskFormCollaborator3            = "form.createTask input[name=\"collaborator3\"]"
 )

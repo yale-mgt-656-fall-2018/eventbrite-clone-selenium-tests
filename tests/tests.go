@@ -57,6 +57,13 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		}
 		return true
 	}
+	countCSSSelector := func(sel string) int {
+		elements, xerr := driver.FindElements(goselenium.ByCSSSelector(sel))
+		if xerr == nil {
+			return len(elements)
+		}
+		return 0
+	}
 
 	// Navigate to the URL.
 	_, err := driver.Go(testURL)
@@ -107,38 +114,27 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	}
 	logTestResult(result, err, "Should redirect users to '/' after logout")
 
+	logout := func() {
+		el, _ := getEl(".logout")
+		result = false
+		if err == nil {
+			el.Click()
+		}
+	}
+
+	// Register the other two users
+	_ = registerUser(driver, testURL, users[1])
+	logout()
+	_ = registerUser(driver, testURL, users[2])
+	logout()
+
+	fmt.Println("A newly registered user")
+	err = loginUser(driver, testURL, users[0])
+	logTestResult(true, err, "Should be able to log in again")
+
+	numTasks := countCSSSelector(selectors.Task)
+	logTestResult(numTasks == 0, nil, "There should be no tasks at first")
+
 	time.Sleep(2000 * time.Millisecond)
 	return numPassed, numFailed, err
-}
-
-func registerUser(driver goselenium.WebDriver, testURL string, user User) error {
-	err2 := loadLogin(driver, testURL)
-	if err2 != nil {
-		return err2
-	}
-	err2 = submitForm(driver, selectors.RegisterForm, user.registerFormData(), selectors.RegisterFormSubmit)
-	return err2
-}
-
-func loadLogin(driver goselenium.WebDriver, targetURL string) error {
-	const script = `
-    var forms = document.getElementsByTagName('form');
-    for(var i=0; i<forms.length; i+=1){
-      var f = forms[i];
-      f.setAttribute('novalidate', true);
-    }
-  `
-	_, err1 := driver.Go(targetURL)
-	if err1 != nil {
-		return err1
-	}
-	_, err2 := driver.ExecuteScript(script)
-	return err2
-}
-
-func statusText(pass bool) string {
-	if pass {
-		return "✅ PASS"
-	}
-	return "❌ FAIL"
 }

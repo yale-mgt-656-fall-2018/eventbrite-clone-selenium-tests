@@ -16,6 +16,23 @@ type User struct {
 	description string
 }
 
+// Task ...
+//
+type Task struct {
+	name          string
+	description   string
+	collaborator1 string
+	collaborator2 string
+	collaborator3 string
+}
+
+func randomTask() Task {
+	return Task{
+		name:        randomdata.Adjective() + " " + randomdata.Noun(),
+		description: randomdata.Paragraph(),
+	}
+}
+
 func randomString(strlen int) string {
 	const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
 	result := make([]byte, strlen)
