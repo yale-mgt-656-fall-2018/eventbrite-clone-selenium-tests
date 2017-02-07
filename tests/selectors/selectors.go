@@ -8,6 +8,7 @@ const (
 	DuplicateEmail    = "Account with this email already exists!"
 	InvalidPassword   = "Invalid password"
 	RegisterForm      = "form.register"
+	Errors            = ".errors"
 	LoginForm         = "form.login"
 	LoginFormSubmit   = "form.login input[type=\"submit\"]"
 	LoginFormEmail    = "form.login input[name=\"email\"]"

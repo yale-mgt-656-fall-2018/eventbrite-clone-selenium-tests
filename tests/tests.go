@@ -57,7 +57,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	err = checkEl(selectors.RegisterForm)
 	logTestResult(true, err, "Should have a registration form")
 
-	err = submitForm(driver, selectors.LoginForm, users[0].loginFormData(), selectors.LoginFormSubmit)
+	_ = submitForm(driver, selectors.LoginForm, users[0].loginFormData(), selectors.LoginFormSubmit)
+	err = checkEl(selectors.Errors)
+	logTestResult(true, err, "Should not allow unrecognized users to log in")
 	time.Sleep(2000 * time.Millisecond)
 
 	return numPassed, numFailed, err
