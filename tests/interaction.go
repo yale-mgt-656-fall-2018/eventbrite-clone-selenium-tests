@@ -37,7 +37,7 @@ func submitForm(driver goselenium.WebDriver, formSelector string, data map[strin
 }
 
 func registerUser(driver goselenium.WebDriver, testURL string, user User) error {
-	err2 := loadLogin(driver, testURL)
+	err2 := loadHome(driver, testURL)
 	if err2 != nil {
 		return err2
 	}
@@ -45,7 +45,7 @@ func registerUser(driver goselenium.WebDriver, testURL string, user User) error 
 	return err2
 }
 func loginUser(driver goselenium.WebDriver, testURL string, user User) error {
-	err2 := loadLogin(driver, testURL)
+	err2 := loadHome(driver, testURL)
 	if err2 != nil {
 		return err2
 	}
@@ -53,7 +53,7 @@ func loginUser(driver goselenium.WebDriver, testURL string, user User) error {
 	return err2
 }
 
-func loadLogin(driver goselenium.WebDriver, targetURL string) error {
+func loadHome(driver goselenium.WebDriver, targetURL string) error {
 	const script = `
     var forms = document.getElementsByTagName('form');
     for(var i=0; i<forms.length; i+=1){

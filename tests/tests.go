@@ -20,6 +20,10 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			fmt.Println(args...)
 		}
 	}
+	die := func(msg string) {
+		driver.DeleteSession()
+		log.Fatalln(msg)
+	}
 	logTestResult := func(passed bool, err error, testDesc string) {
 		doLog(statusText(passed && (err == nil)), "-", testDesc)
 		if passed && err == nil {
@@ -28,8 +32,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			numFailed++
 			if failFast {
 				time.Sleep(5000 * time.Millisecond)
-				driver.DeleteSession()
-				log.Fatalln("Found first failing test, quitting")
+				die("Found first failing test, quitting")
 			}
 		}
 	}
@@ -75,6 +78,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	result = cssSelectorExists(selectors.RegisterForm)
 	logTestResult(result, nil, "Should have a registration form")
 
+	welcomeCount := countCSSSelector(selectors.Welcome)
+	logTestResult(welcomeCount == 0, nil, "Should not be welcoming anybody b/c nobody is logged in!")
+
 	doLog("When trying to register, your site")
 
 	err = submitForm(driver, selectors.LoginForm, users[0].loginFormData(), selectors.LoginFormSubmit)
@@ -83,7 +89,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	badUsers := getBadUsers()
 	for _, user := range badUsers {
-		msg := "should not allow registration of a user with " + user.description
+		msg := "should not allow registration of a user with " + user.flaw
 		err2 := registerUser(driver, testURL, user)
 		if err2 == nil {
 			result = cssSelectorExists(selectors.Errors)
@@ -93,17 +99,19 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	err = registerUser(driver, testURL, users[0])
 	if err == nil {
-		result = cssSelectorExists(selectors.Welcome) && !cssSelectorExists(selectors.Errors)
+		result = cssSelectorExists(selectors.Welcome)
 	}
 	logTestResult(result, err, "Should welcome users that register with valid credentials")
 
-	el, _ := getEl(".logout")
+	el, err := getEl(".logout")
 	result = false
 	if err == nil {
 		el.Click()
-		response, err := driver.CurrentURL()
+		var response *goselenium.CurrentURLResponse
+		response, err = driver.CurrentURL()
 		if err == nil {
-			parsedURL, err := url.Parse(response.URL)
+			var parsedURL *url.URL
+			parsedURL, err = url.Parse(response.URL)
 			if err == nil {
 				result = parsedURL.Path == "/"
 				if result {
@@ -123,9 +131,15 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	}
 
 	// Register the other two users
-	_ = registerUser(driver, testURL, users[1])
+	err = registerUser(driver, testURL, users[1])
+	if err != nil {
+		die("Error registering second user")
+	}
 	logout()
-	_ = registerUser(driver, testURL, users[2])
+	err = registerUser(driver, testURL, users[2])
+	if err != nil {
+		die("Error registering third user")
+	}
 	logout()
 
 	fmt.Println("A newly registered user")
@@ -134,6 +148,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	numTasks := countCSSSelector(selectors.Task)
 	logTestResult(numTasks == 0, nil, "There should be no tasks at first")
+
+	numTaskForms := countCSSSelector(selectors.TaskForm)
+	logTestResult(numTaskForms == 1, nil, "There should a form for submitting tasks")
 
 	time.Sleep(2000 * time.Millisecond)
 	return numPassed, numFailed, err
