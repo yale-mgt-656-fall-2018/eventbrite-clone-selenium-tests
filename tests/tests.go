@@ -152,6 +152,16 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	numTaskForms := countCSSSelector(selectors.TaskForm)
 	logTestResult(numTaskForms == 1, nil, "There should a form for submitting tasks")
 
-	time.Sleep(2000 * time.Millisecond)
+	badTasks := getBadTasks()
+	for _, task := range badTasks {
+		msg := "should not allow creation of a task with " + task.flaw
+		err2 := submitTaskForm(driver, testURL, task)
+		var count int
+		if err2 == nil {
+			count = countCSSSelector(selectors.Errors)
+		}
+		logTestResult(count == 1, err2, msg)
+	}
+
 	return numPassed, numFailed, err
 }

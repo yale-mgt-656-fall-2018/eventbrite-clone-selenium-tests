@@ -22,4 +22,5 @@ const (
 	TaskFormCollaborator1            = "form.createTask input[name=\"collaborator1\"]"
 	TaskFormCollaborator2            = "form.createTask input[name=\"collaborator2\"]"
 	TaskFormCollaborator3            = "form.createTask input[name=\"collaborator3\"]"
+	TaskFormSubmit                   = "form.createTask input[type=\"submit\"]"
 )

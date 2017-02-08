@@ -1,6 +1,8 @@
 package tests
 
 import (
+	"log"
+
 	goselenium "github.com/bunsenapp/go-selenium"
 	"github.com/yale-cpsc-213/social-todo-selenium-tests/tests/selectors"
 )
@@ -44,12 +46,23 @@ func registerUser(driver goselenium.WebDriver, testURL string, user User) error 
 	err2 = submitForm(driver, selectors.RegisterForm, user.registerFormData(), selectors.RegisterFormSubmit)
 	return err2
 }
+
 func loginUser(driver goselenium.WebDriver, testURL string, user User) error {
 	err2 := loadHome(driver, testURL)
 	if err2 != nil {
 		return err2
 	}
 	err2 = submitForm(driver, selectors.LoginForm, user.loginFormData(), selectors.LoginFormSubmit)
+	return err2
+}
+
+func submitTaskForm(driver goselenium.WebDriver, testURL string, task Task) error {
+	err2 := loadHome(driver, testURL)
+	if err2 != nil {
+		return err2
+	}
+	log.Println("loaded home")
+	err2 = submitForm(driver, selectors.TaskForm, task.createFormData(), selectors.TaskFormSubmit)
 	return err2
 }
 
