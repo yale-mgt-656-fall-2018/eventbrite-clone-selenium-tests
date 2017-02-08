@@ -13,17 +13,17 @@ import (
 
 // You should run this something like
 //
-// > todotest "http://localhost:4444/wd/hub" "http://localhost:8000"
+// > social-todo-selenium-tests "http://localhost:4444/wd/hub" "http://localhost:8000"
 //
 // if you are using Selenium and
 //
-// > todotest "http://localhost:9515" "http://localhost:8000"
+// > social-todo-selenium-tests "http://localhost:9515" "http://localhost:8000"
 //
 // if you are using "naked" chromedriver. Of course, the port
 // will depend on how you are running it.
 //
 func main() {
-	usage := "todotest SELENIUM_URL TEST_URL"
+	usage := "social-todo-selenium-tests SELENIUM_URL TEST_URL"
 	if len(os.Args) != 3 {
 		log.Fatal(usage)
 	}
