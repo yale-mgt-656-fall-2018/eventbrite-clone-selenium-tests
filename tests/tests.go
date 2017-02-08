@@ -48,9 +48,16 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	getEl := func(sel string) (goselenium.Element, error) {
 		return driver.FindElement(goselenium.ByCSSSelector(sel))
 	}
+	countCSSSelector := func(sel string) int {
+		elements, xerr := driver.FindElements(goselenium.ByCSSSelector(sel))
+		if xerr == nil {
+			return len(elements)
+		}
+		return 0
+	}
 	cssSelectorExists := func(sel string) bool {
-		_, xerr := getEl(sel)
-		return (xerr == nil)
+		count := countCSSSelector(sel)
+		return (count != 0)
 	}
 	cssSelectorsExists := func(sels ...string) bool {
 		for _, sel := range sels {
@@ -59,13 +66,6 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			}
 		}
 		return true
-	}
-	countCSSSelector := func(sel string) int {
-		elements, xerr := driver.FindElements(goselenium.ByCSSSelector(sel))
-		if xerr == nil {
-			return len(elements)
-		}
-		return 0
 	}
 
 	// Navigate to the URL.
