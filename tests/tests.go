@@ -163,5 +163,27 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		logTestResult(count == 1, err2, msg)
 	}
 
+	task := randomTask(false)
+	task.collaborator1 = users[1].email
+	err = submitTaskForm(driver, testURL, task)
+	numTasks = countCSSSelector(selectors.Task)
+	logTestResult(numTasks == 1, err, "There should be one task for user #1 after a valid task is submitted")
+
+	task = randomTask(false)
+	err = submitTaskForm(driver, testURL, task)
+	numTasks = countCSSSelector(selectors.Task)
+	logTestResult(numTasks == 2, err, "There should be two tasks for user #1 after another is submitted")
+
+	logout()
+	err = loginUser(driver, testURL, users[1])
+	numTasks = countCSSSelector(selectors.Task)
+	logTestResult(numTasks == 1, err, "User #2 should be able to log in and see the task that was shared with her")
+	logTestResult(countCSSSelector(selectors.TaskDelete) == 0, err, "She is not prompted to delete that task (she's not the owner)")
+	logTestResult(countCSSSelector(selectors.TaskCompleted) == 0, err, "The task is initially incomplete")
+	logTestResult(countCSSSelector(selectors.TaskComplete) == 0, err, "She is prompted to complete the task")
+	el, err = getEl(selectors.TaskComplete)
+	el.Click()
+	logTestResult(countCSSSelector(selectors.TaskCompleted) == 0, err, "The task is marked as completed when she clicks the \"complete\" action")
+
 	return numPassed, numFailed, err
 }

@@ -3,8 +3,11 @@ package selectors
 const (
 	Welcome                          = ".welcome"
 	Logout                           = ".logout"
-	Task                             = ".tasks-list-item"
-	TaskList                         = ".tasks-list"
+	Task                             = "li.task"
+	TaskCompleted                    = "li.task.completed"
+	TaskComplete                     = "li.task .complete"
+	TaskDelete                       = "li.task .delete"
+	TaskList                         = "ul.tasks"
 	Errors                           = ".errors"
 	LoginForm                        = "form.login"
 	LoginFormSubmit                  = "form.login input[type=\"submit\"]"

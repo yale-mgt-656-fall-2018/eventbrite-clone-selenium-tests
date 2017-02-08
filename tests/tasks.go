@@ -34,7 +34,7 @@ func (t Task) createFormData() map[string]string {
 		selectors.TaskFormDescription:   t.description,
 		selectors.TaskFormCollaborator1: t.collaborator1,
 		selectors.TaskFormCollaborator2: t.collaborator2,
-		selectors.TaskFormCollaborator3: t.collaborator2,
+		selectors.TaskFormCollaborator3: t.collaborator3,
 	}
 	return data
 }
@@ -51,11 +51,6 @@ func getBadTasks() []Task {
 	t = randomTask(true)
 	t.name = randomString(501)
 	t.flaw = "name is more than 500 letters"
-	tasks = append(tasks, t)
-
-	t = randomTask(true)
-	t.description = ""
-	t.flaw = "empty description"
 	tasks = append(tasks, t)
 
 	t = randomTask(true)

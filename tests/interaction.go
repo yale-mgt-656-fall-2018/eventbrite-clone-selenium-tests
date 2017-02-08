@@ -1,8 +1,6 @@
 package tests
 
 import (
-	"log"
-
 	goselenium "github.com/bunsenapp/go-selenium"
 	"github.com/yale-cpsc-213/social-todo-selenium-tests/tests/selectors"
 )
@@ -61,7 +59,6 @@ func submitTaskForm(driver goselenium.WebDriver, testURL string, task Task) erro
 	if err2 != nil {
 		return err2
 	}
-	log.Println("loaded home")
 	err2 = submitForm(driver, selectors.TaskForm, task.createFormData(), selectors.TaskFormSubmit)
 	return err2
 }
