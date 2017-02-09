@@ -123,10 +123,10 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	logTestResult(result, err, "Should redirect users to '/' after logout")
 
 	logout := func() {
-		el, _ := getEl(".logout")
+		element, _ := getEl(".logout")
 		result = false
 		if err == nil {
-			el.Click()
+			element.Click()
 		}
 	}
 
@@ -175,15 +175,29 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	logTestResult(numTasks == 2, err, "There should be two tasks for user #1 after another is submitted")
 
 	logout()
-	err = loginUser(driver, testURL, users[1])
+	_ = loginUser(driver, testURL, users[1])
 	numTasks = countCSSSelector(selectors.Task)
 	logTestResult(numTasks == 1, err, "User #2 should be able to log in and see the task that was shared with her")
-	logTestResult(countCSSSelector(selectors.TaskDelete) == 0, err, "She is not prompted to delete that task (she's not the owner)")
-	logTestResult(countCSSSelector(selectors.TaskCompleted) == 0, err, "The task is initially incomplete")
-	logTestResult(countCSSSelector(selectors.TaskComplete) == 0, err, "She is prompted to complete the task")
+	logTestResult(numTasks == 1 && countCSSSelector(selectors.TaskDelete) == 0, err, "She is not prompted to delete that task (she's not the owner)")
+	logTestResult(numTasks == 1 && countCSSSelector(selectors.TaskCompleted) == 0, err, "The task is initially incomplete")
+	logTestResult(numTasks == 1 && countCSSSelector(selectors.TaskComplete) == 0, err, "She is prompted to complete the task")
 	el, err = getEl(selectors.TaskComplete)
 	el.Click()
-	logTestResult(countCSSSelector(selectors.TaskCompleted) == 0, err, "The task is marked as completed when she clicks the \"complete\" action")
+	logTestResult(countCSSSelector(selectors.TaskCompleted) == 1, err, "The task is marked as completed when she clicks the \"complete\" action")
+	logout()
+
+	_ = loginUser(driver, testURL, users[1])
+	numCompleted := countCSSSelector(selectors.TaskCompleted)
+	numTasks = countCSSSelector(selectors.Task)
+	logTestResult(numTasks == 2 && numCompleted == 1, err, "When user #0 logs in, one of the two tasks is marked as completed")
+	logTestResult(countCSSSelector(selectors.TaskDelete) == 2, err, "User #0 is  prompted to delete both tasks (she's the owner)")
+	el, err = getEl(selectors.TaskDelete)
+	el.Click()
+	logTestResult(countCSSSelector(selectors.Task) == 1, err, "After deleting a task, only one is shown now")
+	numTasks = countCSSSelector(selectors.Task)
+	el, err = getEl(selectors.TaskDelete)
+	el.Click()
+	logTestResult(numTasks == 1 && countCSSSelector(selectors.Task) == 0, err, "After deleting the next task, none are shown")
 
 	return numPassed, numFailed, err
 }

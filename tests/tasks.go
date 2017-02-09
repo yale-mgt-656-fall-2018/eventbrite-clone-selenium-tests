@@ -53,10 +53,10 @@ func getBadTasks() []Task {
 	t.flaw = "name is more than 500 letters"
 	tasks = append(tasks, t)
 
-	t = randomTask(true)
-	t.description = randomString(5001)
-	t.flaw = "description is more than 5000"
-	tasks = append(tasks, t)
+	// t = randomTask(true)
+	// t.description = randomString(5001)
+	// t.flaw = "description is more than 5000"
+	// tasks = append(tasks, t)
 
 	t = randomTask(true)
 	t.collaborator1 = randomString(10)
