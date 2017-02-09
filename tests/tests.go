@@ -31,7 +31,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		} else {
 			numFailed++
 			if failFast {
-				time.Sleep(10000 * time.Millisecond)
+				time.Sleep(5000 * time.Millisecond)
 				die("Found first failing test, quitting")
 			}
 		}
