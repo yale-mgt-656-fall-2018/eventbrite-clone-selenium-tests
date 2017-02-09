@@ -5,7 +5,7 @@ const (
 	Logout                           = ".logout"
 	Task                             = "li.task"
 	TaskCompleted                    = "li.task.completed"
-	TaskComplete                     = "li.task .complete"
+	TaskToggle                       = "li.task .toggle"
 	TaskDelete                       = "li.task .delete"
 	TaskList                         = "ul.tasks"
 	Errors                           = ".errors"

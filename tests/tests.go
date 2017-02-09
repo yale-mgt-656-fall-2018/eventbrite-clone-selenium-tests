@@ -31,7 +31,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		} else {
 			numFailed++
 			if failFast {
-				time.Sleep(5000 * time.Millisecond)
+				time.Sleep(10000 * time.Millisecond)
 				die("Found first failing test, quitting")
 			}
 		}
@@ -70,22 +70,22 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	// Navigate to the URL.
 	_, err := driver.Go(testURL)
-	logTestResult(true, err, "Should be up and running")
+	logTestResult(true, err, "should be up and running")
 
 	result := cssSelectorExists(selectors.LoginForm)
-	logTestResult(result, nil, "Should have a login form")
+	logTestResult(result, nil, "should have a login form")
 
 	result = cssSelectorExists(selectors.RegisterForm)
-	logTestResult(result, nil, "Should have a registration form")
+	logTestResult(result, nil, "should have a registration form")
 
 	welcomeCount := countCSSSelector(selectors.Welcome)
-	logTestResult(welcomeCount == 0, nil, "Should not be welcoming anybody b/c nobody is logged in!")
+	logTestResult(welcomeCount == 0, nil, "should not be welcoming anybody b/c nobody is logged in!")
 
 	doLog("When trying to register, your site")
 
 	err = submitForm(driver, selectors.LoginForm, users[0].loginFormData(), selectors.LoginFormSubmit)
 	result = cssSelectorExists(selectors.Errors)
-	logTestResult(result, err, "Should not allow unrecognized users to log in")
+	logTestResult(result, err, "should not allow unrecognized users to log in")
 
 	badUsers := getBadUsers()
 	for _, user := range badUsers {
@@ -101,7 +101,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	if err == nil {
 		result = cssSelectorExists(selectors.Welcome)
 	}
-	logTestResult(result, err, "Should welcome users that register with valid credentials")
+	logTestResult(result, err, "should welcome users that register with valid credentials")
 
 	el, err := getEl(".logout")
 	result = false
@@ -120,7 +120,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			}
 		}
 	}
-	logTestResult(result, err, "Should redirect users to '/' after logout")
+	logTestResult(result, err, "should redirect users to '/' after logout")
 
 	logout := func() {
 		element, _ := getEl(".logout")
@@ -144,17 +144,17 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	fmt.Println("A newly registered user")
 	err = loginUser(driver, testURL, users[0])
-	logTestResult(true, err, "Should be able to log in again")
+	logTestResult(countCSSSelector(selectors.Welcome) == 1, err, "should be able to log in again")
 
 	numTasks := countCSSSelector(selectors.Task)
-	logTestResult(numTasks == 0, nil, "There should be no tasks at first")
+	logTestResult(numTasks == 0, nil, "should see no tasks at first")
 
 	numTaskForms := countCSSSelector(selectors.TaskForm)
-	logTestResult(numTaskForms == 1, nil, "There should a form for submitting tasks")
+	logTestResult(numTaskForms == 1, nil, "should see a form for submitting tasks")
 
 	badTasks := getBadTasks()
 	for _, task := range badTasks {
-		msg := "should not allow creation of a task with " + task.flaw
+		msg := "should not be able to create a task with " + task.flaw
 		err2 := submitTaskForm(driver, testURL, task)
 		var count int
 		if err2 == nil {
@@ -167,37 +167,43 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	task.collaborator1 = users[1].email
 	err = submitTaskForm(driver, testURL, task)
 	numTasks = countCSSSelector(selectors.Task)
-	logTestResult(numTasks == 1, err, "There should be one task for user #1 after a valid task is submitted")
+	logTestResult(numTasks == 1, err, "should see a task after a valid task is submitted")
 
 	task = randomTask(false)
 	err = submitTaskForm(driver, testURL, task)
 	numTasks = countCSSSelector(selectors.Task)
-	logTestResult(numTasks == 2, err, "There should be two tasks for user #1 after another is submitted")
+	logTestResult(numTasks == 2, err, "should see two tasks after another is submitted")
+	time.Sleep(3000 * time.Millisecond)
 
 	logout()
+	fmt.Println("User #2, after logging in")
 	_ = loginUser(driver, testURL, users[1])
 	numTasks = countCSSSelector(selectors.Task)
-	logTestResult(numTasks == 1, err, "User #2 should be able to log in and see the task that was shared with her")
-	logTestResult(numTasks == 1 && countCSSSelector(selectors.TaskDelete) == 0, err, "She is not prompted to delete that task (she's not the owner)")
-	logTestResult(numTasks == 1 && countCSSSelector(selectors.TaskCompleted) == 0, err, "The task is initially incomplete")
-	logTestResult(numTasks == 1 && countCSSSelector(selectors.TaskComplete) == 0, err, "She is prompted to complete the task")
-	el, err = getEl(selectors.TaskComplete)
+	logTestResult(numTasks == 1, err, "should be able to see the task that was shared with her by user #1")
+	logTestResult(numTasks == 1 && countCSSSelector(selectors.TaskDelete) == 0, err, "should not be not prompted to delete that task (she's not the owner)")
+	logTestResult(numTasks == 1 && countCSSSelector(selectors.TaskCompleted) == 0, err, "should see the task as incomplete")
+	logTestResult(numTasks == 1 && countCSSSelector(selectors.TaskToggle) == 1, err, "should be able to mark the the task as complete")
+	el, err = getEl(selectors.TaskToggle)
 	el.Click()
-	logTestResult(countCSSSelector(selectors.TaskCompleted) == 1, err, "The task is marked as completed when she clicks the \"complete\" action")
+	logTestResult(countCSSSelector(selectors.TaskCompleted) == 1, err, "should see the task as complete after clicking the \"toggle\" action")
 	logout()
 
-	_ = loginUser(driver, testURL, users[1])
+	_ = loginUser(driver, testURL, users[0])
+	fmt.Println("User #1, after logging in")
 	numCompleted := countCSSSelector(selectors.TaskCompleted)
 	numTasks = countCSSSelector(selectors.Task)
-	logTestResult(numTasks == 2 && numCompleted == 1, err, "When user #0 logs in, one of the two tasks is marked as completed")
-	logTestResult(countCSSSelector(selectors.TaskDelete) == 2, err, "User #0 is  prompted to delete both tasks (she's the owner)")
+	logTestResult(numTasks == 2 && numCompleted == 1, err, "should see one of the two tasks marked as completed")
+	el, err = getEl(selectors.TaskToggle)
+	el.Click()
+	logTestResult(countCSSSelector(selectors.TaskCompleted) == 0, err, "should be able to mark that is incompleted when she clicks the \"toggle\" action")
+	logTestResult(countCSSSelector(selectors.TaskDelete) == 2, err, "should be prompted to delete both tasks (she's the owner)")
 	el, err = getEl(selectors.TaskDelete)
 	el.Click()
-	logTestResult(countCSSSelector(selectors.Task) == 1, err, "After deleting a task, only one is shown now")
+	logTestResult(countCSSSelector(selectors.Task) == 1, err, "should only see one after deleting a task")
 	numTasks = countCSSSelector(selectors.Task)
 	el, err = getEl(selectors.TaskDelete)
 	el.Click()
-	logTestResult(numTasks == 1 && countCSSSelector(selectors.Task) == 0, err, "After deleting the next task, none are shown")
+	logTestResult(numTasks == 1 && countCSSSelector(selectors.Task) == 0, err, "should see none after deleting two tasks")
 
 	return numPassed, numFailed, err
 }
