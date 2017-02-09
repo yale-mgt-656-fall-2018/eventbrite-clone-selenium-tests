@@ -1,6 +1,8 @@
 package tests
 
 import (
+	"math/rand"
+
 	randomdata "github.com/Pallinder/go-randomdata"
 	"github.com/yale-cpsc-213/social-todo-selenium-tests/tests/selectors"
 )
@@ -17,7 +19,7 @@ type User struct {
 func randomUser() User {
 	return User{
 		name:     randomdata.FullName(randomdata.RandomGender),
-		email:    randomdata.Email(),
+		email:    randomString(7+rand.Intn(5)) + "@" + randomString(7+rand.Intn(5)) + ".com",
 		password: randomString(10),
 	}
 }
