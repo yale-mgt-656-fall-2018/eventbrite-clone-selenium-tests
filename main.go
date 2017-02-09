@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"strings"
 
 	todotests "github.com/yale-cpsc-213/social-todo-selenium-tests/tests"
 
@@ -23,12 +24,16 @@ import (
 // will depend on how you are running it.
 //
 func main() {
-	usage := "social-todo-selenium-tests SELENIUM_URL TEST_URL"
-	if len(os.Args) != 3 {
+	usage := "social-todo-selenium-tests SELENIUM_URL TEST_URL [-fast]"
+	if len(os.Args) < 3 {
 		log.Fatal(usage)
 	}
 	log.SetFlags(log.Lshortfile)
-	doRun(os.Args[1], os.Args[2])
+	failFast := false
+	if len(os.Args) >= 4 && strings.Contains(os.Args[3], "fast") {
+		failFast = true
+	}
+	doRun(os.Args[1], os.Args[2], failFast)
 }
 
 func isValidURL(u string) bool {
@@ -39,7 +44,7 @@ func isValidURL(u string) bool {
 	return false
 }
 
-func doRun(seleniumURL string, testURL string) {
+func doRun(seleniumURL string, testURL string, failFast bool) {
 	// Create capabilities, driver etc.
 	capabilities := goselenium.Capabilities{}
 	capabilities.SetBrowser(goselenium.ChromeBrowser())
@@ -59,5 +64,5 @@ func doRun(seleniumURL string, testURL string) {
 	// Delete the session once this function is completed.
 	defer driver.DeleteSession()
 
-	todotests.Run(driver, testURL, true, true)
+	todotests.Run(driver, testURL, true, failFast)
 }
