@@ -49,7 +49,7 @@ func getBadUsers() []User {
 	users = append(users, u)
 
 	u = randomUser()
-	u.email = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@gmail.com"
+	u.email = randomString(50) + "@gmail.com"
 	u.flaw = "email that is more than 50 letters"
 	users = append(users, u)
 
