@@ -87,3 +87,10 @@ User #1, after logging in
 ```
 
 You can watch a video of me running the tests here: [https://youtu.be/FcqJj0U6a7M](https://youtu.be/FcqJj0U6a7M).
+
+## Tips
+
+* Most of the tests are in the `tests.go` file.
+* The CSS selectors we are using to interact with your app are in the `selectors.go` file. You'll need to structure your HTML and CSS such that the code passes.
+* Use the `-fast` flag if you want to save some time.
+* If you want to alter this code, e.g. slow down your browser, simply clone with repo into your `$GOPATH`. On my system, this code lives at `/Users/kljensen/go/src/github.com/yale-cpsc-213/social-todo-selenium-tests`. Then run `go get` and `go build`. This was built with go1.7.4.
