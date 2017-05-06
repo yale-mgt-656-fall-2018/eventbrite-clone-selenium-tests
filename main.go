@@ -1,10 +1,10 @@
 package main
 
 import (
+	"log"
 	"net/url"
 	"os"
 	"strings"
-	"log"
 
 	todotests "github.com/yale-cpsc-213/social-todo-selenium-tests/tests"
 )
