@@ -10,7 +10,7 @@ import (
 	"github.com/yale-cpsc-213/social-todo-selenium-tests/tests/selectors"
 )
 
-func RunForURL(seleniumURL string, testURL string, failFast bool) (int, int, error) {
+func RunForURL(seleniumURL string, testURL string, failFast bool, sleepDuration time.Duration) (int, int, error) {
 	// Create capabilities, driver etc.
 	capabilities := goselenium.Capabilities{}
 	capabilities.SetBrowser(goselenium.ChromeBrowser())
@@ -30,7 +30,7 @@ func RunForURL(seleniumURL string, testURL string, failFast bool) (int, int, err
 	// Delete the session once this function is completed.
 	defer driver.DeleteSession()
 
-	return Run(driver, testURL, true, failFast)
+	return Run(driver, testURL, true, failFast, sleepDuration)
 }
 
 // Run - run all tests
