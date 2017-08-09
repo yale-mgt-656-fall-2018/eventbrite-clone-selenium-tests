@@ -2,7 +2,7 @@ package tests
 
 import (
 	goselenium "github.com/bunsenapp/go-selenium"
-	"github.com/yale-cpsc-213/social-todo-selenium-tests/tests/selectors"
+	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
 )
 
 func fillForm(driver goselenium.WebDriver, formSelector string, data map[string]string) error {

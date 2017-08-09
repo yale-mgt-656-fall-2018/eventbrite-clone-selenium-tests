@@ -7,7 +7,7 @@ import (
 	"time"
 
 	goselenium "github.com/bunsenapp/go-selenium"
-	"github.com/yale-cpsc-213/social-todo-selenium-tests/tests/selectors"
+	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
 )
 
 func RunForURL(seleniumURL string, testURL string, failFast bool, sleepDuration time.Duration) (int, int, error) {

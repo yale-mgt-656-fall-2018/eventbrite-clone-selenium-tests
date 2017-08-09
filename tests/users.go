@@ -4,7 +4,7 @@ import (
 	"math/rand"
 
 	randomdata "github.com/Pallinder/go-randomdata"
-	"github.com/yale-cpsc-213/social-todo-selenium-tests/tests/selectors"
+	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
 )
 
 // User ...
