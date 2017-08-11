@@ -18,8 +18,8 @@ const (
 	NewEventLink = ".new"
 
 	// about
-	Name     = "span[id=\"nick-name-name\"]"    // how to get nickname??
-	Headshot = "img[id=\"nick-name-headshot\"]" // ditto
+	Names     = "span[id=\"nick-name-name\"]"    // how to get nickname??
+	Headshots = "img[id=\"nick-name-headshot\"]" // ditto
 
 	// new event
 	NewEventForm          = "form[method=\"POST\"]"
@@ -41,14 +41,11 @@ const (
 	NewEventMinuteLabel   = "form label[for=\"minute\"]"
 	NewEventSubmit        = "form input[name=\"submit\"][type=\"submit\"]"
 
-	// RSVP
-	RsvpForm  = "form[method=\"POST\"]"
-	RsvpEmail = "form input[type=\"email\"][id=\"email\"][name=\"email\"]"
-
 	// event detail
 	EventTitle     = "h1[id=\"title\"]"
 	EventDate      = "span[id=\"date\"]"
 	EventLocation  = "span[id=\"location\"]"
 	EventImage     = "[id=\"image\"]"
 	EventAttendees = "ul[id=\"attendees\"]"
+	RsvpEmail = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
 )
