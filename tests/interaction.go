@@ -81,7 +81,7 @@ func loadHome(driver goselenium.WebDriver, targetURL string) error {
 
 func statusText(pass bool) string {
 	if pass {
-		return "✅ PASS"
+		return "😎 PASS"
 	}
-	return "❌ FAIL"
+	return "😭 FAIL"
 }
