@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	todotests "github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests"
+	eventtests "github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests"
 )
 
 // You should run this something like
@@ -30,7 +30,7 @@ func main() {
 	if len(os.Args) >= 4 && strings.Contains(os.Args[3], "fast") {
 		failFast = true
 	}
-	todotests.RunForURL(os.Args[1], os.Args[2], failFast, 0)
+	eventtests.RunForURL(os.Args[1], os.Args[2], failFast, 0)
 }
 
 func isValidURL(u string) bool {
