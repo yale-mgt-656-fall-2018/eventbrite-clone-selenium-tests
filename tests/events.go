@@ -9,11 +9,12 @@ type Event struct {
 	title    string
 	location string
 	image    string
-	year     string
+	year     int
 	month    string
-	day      string
-	hour     string
-	minute   string
+	day      int
+	hour     int
+	minute   int
+	flaw		 string
 }
 
 func randomEvent() Event {
@@ -31,15 +32,15 @@ func randomEvent() Event {
 }
 
 func (e Event) createFormData() map[string]string {
-	data := map[string]string{
+	data := map[string]string {
 		selectors.NewEventTitle:    e.title,
-		selectors.NewEventImage:    e.image,
-		selectors.NewEventLocation: e.location,
-		selectors.NewEventYear:     e.year,
-		selectors.NewEventMonth:    e.month,
-		selectors.NewEventDay:      e.day,
-		selectors.NewEventHour:     e.hour,
-		selectors.NewEventMinute:   e.minute,
+		// selectors.NewEventImage:    e.image,
+		// selectors.NewEventLocation: e.location,
+		// selectors.NewEventYear:     e.year,
+		// selectors.NewEventMonth:    e.month,
+		// selectors.NewEventDay:      e.day,
+		// selectors.NewEventHour:     e.hour,
+		// selectors.NewEventMinute:   e.minute,
 	}
 	return data
 }
@@ -50,7 +51,7 @@ func getBadEvents() []Event {
 
 	e = randomEvent()
 	e.flaw = "no title"
-	e.name = ""
+	e.title = ""
 	events = append(events, e)
 
 	e = randomEvent()
@@ -65,7 +66,7 @@ func getBadEvents() []Event {
 
 	e = randomEvent()
 	e.flaw = "no year"
-	e.year = ""
+	e.year = -1
 	events = append(events, e)
 
 	e = randomEvent()
@@ -75,17 +76,17 @@ func getBadEvents() []Event {
 
 	e = randomEvent()
 	e.flaw = "no day"
-	e.day = ""
+	e.day = -1
 	events = append(events, e)
 
 	e = randomEvent()
 	e.flaw = "no hour"
-	e.hour = ""
+	e.hour = -1
 	events = append(events, e)
 
 	e = randomEvent()
 	e.flaw = "no minute"
-	e.minute = ""
+	e.minute = -1
 	events = append(events, e)
 
 	// any other flaws?

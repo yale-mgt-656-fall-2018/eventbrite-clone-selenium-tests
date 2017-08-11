@@ -36,30 +36,12 @@ func submitForm(driver goselenium.WebDriver, formSelector string, data map[strin
 	return nil
 }
 
-func registerUser(driver goselenium.WebDriver, testURL string, user User) error {
+func submitTaskForm(driver goselenium.WebDriver, testURL string, event Event) error {
 	err2 := loadHome(driver, testURL)
 	if err2 != nil {
 		return err2
 	}
-	err2 = submitForm(driver, selectors.RegisterForm, user.registerFormData(), selectors.RegisterFormSubmit)
-	return err2
-}
-
-func loginUser(driver goselenium.WebDriver, testURL string, user User) error {
-	err2 := loadHome(driver, testURL)
-	if err2 != nil {
-		return err2
-	}
-	err2 = submitForm(driver, selectors.LoginForm, user.loginFormData(), selectors.LoginFormSubmit)
-	return err2
-}
-
-func submitTaskForm(driver goselenium.WebDriver, testURL string, task Task) error {
-	err2 := loadHome(driver, testURL)
-	if err2 != nil {
-		return err2
-	}
-	err2 = submitForm(driver, selectors.TaskForm, task.createFormData(), selectors.TaskFormSubmit)
+	err2 = submitForm(driver, selectors.NewEventForm, event.createFormData(), selectors.NewEventSubmit)
 	return err2
 }
 
@@ -81,7 +63,7 @@ func loadHome(driver goselenium.WebDriver, targetURL string) error {
 
 func statusText(pass bool) string {
 	if pass {
-		return "😎 PASS"
+		return "😎  PASS"
 	}
-	return "😭 FAIL"
+	return "😭  FAIL"
 }
