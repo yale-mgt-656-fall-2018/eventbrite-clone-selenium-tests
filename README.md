@@ -26,13 +26,13 @@ chromedriver --port 4444
 Clearly, you can use whatever port you want. Then, you run the test code like this
 
 ```
-social-todo-selenium-tests "http://localhost:4444/wd/hub" "http://localhost:8000"
+eventbrite-clone-selenium-tests "http://localhost:4444/wd/hub" "http://localhost:8000"
 ```
 
 if you are using selenium or
 
 ```
-social-todo-selenium-tests "http://localhost:4444" "http://localhost:8000"
+eventbrite-clone-selenium-tests "http://localhost:4444" "http://localhost:8000"
 ```
 
 if you are using ChromeDriver (with which you don't need `/wd/hub`). That will run
