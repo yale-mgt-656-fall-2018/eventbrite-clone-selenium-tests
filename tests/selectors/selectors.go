@@ -2,11 +2,11 @@ package selectors
 
 const (
 	// every page
-	Header          = "header"
-	BootstrapHref   = "header.link.href"
+	Header          = "head"
+	BootstrapHref   = "head link[href~=\"bootstrap\"]"
 	Footer          = "footer"
-	FooterHomeLink  = "footer.a[href=\"/\"]"
-	FooterAboutLink = "footer.a[href=\"/about\"]"
+	FooterHomeLink  = "footer a[href=\"/\"]"
+	FooterAboutLink = "footer a[href=\"/about\"]"
 	Errors          = "ul li.form-errors"
 
 	// home
