@@ -1,25 +1,25 @@
 package selectors
 
 const (
-	// every page
+	// Every page ...
 	Header          = "head"
-	BootstrapHref   = "head link[href~=\"bootstrap\"]"
+	BootstrapHref   = "head link[rel=\"stylesheet\"][href*=\"bootstrap\"]"
 	Footer          = "footer"
 	FooterHomeLink  = "footer a[href=\"/\"]"
 	FooterAboutLink = "footer a[href=\"/about\"]"
 	Errors          = "ul li.form-errors"
 
 	// home
-	TeamLogo     = "img[id=\"logo\"]"
-	EventList    = "ul"
-	Event        = "ul li.event"
-	EventTime    = "li.event time[datetime]"
+	TeamLogo  = "img[id=\"logo\"]"
+	EventList = "ul"
+	Event     = "ul li.event"
+	EventTime = "li.event time[datetime]"
 	// EventTitle   = "li.event.h1" // how to specify title?
-	NewEventLink = ".new"
+	NewEventLink = "[id=\"new\"]"
 
 	// about
-	Names     = "span[id=\"nick-name-name\"]"    // how to get nickname??
-	Headshots = "img[id=\"nick-name-headshot\"]" // ditto
+	Names     = "span[id*=\"name\"]"    // how to get nickname??
+	Headshots = "img[id*=\"headshot\"]" // ditto
 
 	// new event
 	NewEventForm          = "form[method=\"POST\"]"
@@ -47,5 +47,5 @@ const (
 	EventLocation  = "span[id=\"location\"]"
 	EventImage     = "[id=\"image\"]"
 	EventAttendees = "ul[id=\"attendees\"]"
-	RsvpEmail = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
+	RsvpEmail      = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
 )
