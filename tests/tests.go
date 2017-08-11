@@ -91,7 +91,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	doLog("Home page:")
 
 	result := cssSelectorExists(selectors.BootstrapHref)
-	logTestResult(result, nil, "looks 💯 ")
+	logTestResult(result, nil, "looks 💯  with Bootstrap CSS ")
 
 	result = cssSelectorExists(selectors.Header)
 	logTestResult(result, nil, "has a header")
@@ -124,7 +124,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		time.Sleep(sleepDuration)
 
 		result = cssSelectorExists(selectors.BootstrapHref)
-		logTestResult(result, nil, "looks 💯 ")
+		logTestResult(result, nil, "looks 💯  with Bootstrap CSS ")
 
 		result = cssSelectorExists(selectors.Header)
 		logTestResult(result, nil, "has a header")
@@ -151,18 +151,13 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		doLog("New event page:")
 		time.Sleep(sleepDuration)
 
-		result := cssSelectorExists(selectors.BootstrapHref)
-		logTestResult(result, nil, "looks 💯 ")
+		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
+		headerResult := cssSelectorExists(selectors.Header)
+		footerResult := cssSelectorExists(selectors.Footer)
+		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
+		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
 
-		result = cssSelectorExists(selectors.Header)
-		logTestResult(result, nil, "has a header")
-		result = cssSelectorExists(selectors.Footer)
-		logTestResult(result, nil, "has a footer")
-
-		result = cssSelectorExists(selectors.FooterHomeLink)
-		logTestResult(result, nil, "footer links to home page")
-		result = cssSelectorExists(selectors.FooterAboutLink)
-		logTestResult(result, nil, "footer links to about page")
+		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
 
 		result = cssSelectorExists(selectors.NewEventForm)
 		logTestResult(result, nil, "has a form for event submission")
@@ -206,7 +201,6 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 		// submit a bunch of bad form data
 
-
 	}
 
 	_, err = driver.Go(testURL + "/events/0")
@@ -217,18 +211,13 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		doLog("Event 0:")
 		time.Sleep(sleepDuration)
 
-		result = cssSelectorExists(selectors.BootstrapHref)
-		logTestResult(result, nil, "looks 💯 ")
+		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
+		headerResult := cssSelectorExists(selectors.Header)
+		footerResult := cssSelectorExists(selectors.Footer)
+		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
+		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
 
-		result = cssSelectorExists(selectors.Header)
-		logTestResult(result, nil, "has a header")
-		result = cssSelectorExists(selectors.Footer)
-		logTestResult(result, nil, "has a footer")
-
-		result = cssSelectorExists(selectors.FooterHomeLink)
-		logTestResult(result, nil, "footer links to home page")
-		result = cssSelectorExists(selectors.FooterAboutLink)
-		logTestResult(result, nil, "footer links to about page")
+		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
 
 		result = cssSelectorExists(selectors.EventTitle)
 		logTestResult(result, nil, "has a title")
@@ -255,18 +244,13 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		doLog("Event 1:")
 		time.Sleep(sleepDuration)
 
-		result = cssSelectorExists(selectors.BootstrapHref)
-		logTestResult(result, nil, "looks 💯 ")
+		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
+		headerResult := cssSelectorExists(selectors.Header)
+		footerResult := cssSelectorExists(selectors.Footer)
+		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
+		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
 
-		result = cssSelectorExists(selectors.Header)
-		logTestResult(result, nil, "has a header")
-		result = cssSelectorExists(selectors.Footer)
-		logTestResult(result, nil, "has a footer")
-
-		result = cssSelectorExists(selectors.FooterHomeLink)
-		logTestResult(result, nil, "footer links to home page")
-		result = cssSelectorExists(selectors.FooterAboutLink)
-		logTestResult(result, nil, "footer links to about page")
+		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
 
 		result = cssSelectorExists(selectors.EventTitle)
 		logTestResult(result, nil, "has a title")
@@ -279,7 +263,10 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		result = cssSelectorExists(selectors.EventAttendees)
 		logTestResult(result, nil, "has a list of attendees")
 
-		// RSVP test
+		result = cssSelectorExists(selectors.RsvpEmail)
+		logTestResult(result, nil, "has a form to RSVP")
+
+		// test RSVP form
 	}
 
 	_, err = driver.Go(testURL + "/events/2")
@@ -290,18 +277,13 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		doLog("Event 2:")
 		time.Sleep(sleepDuration)
 
-		result = cssSelectorExists(selectors.BootstrapHref)
-		logTestResult(result, nil, "looks 💯 ")
+		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
+		headerResult := cssSelectorExists(selectors.Header)
+		footerResult := cssSelectorExists(selectors.Footer)
+		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
+		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
 
-		result = cssSelectorExists(selectors.Header)
-		logTestResult(result, nil, "has a header")
-		result = cssSelectorExists(selectors.Footer)
-		logTestResult(result, nil, "has a footer")
-
-		result = cssSelectorExists(selectors.FooterHomeLink)
-		logTestResult(result, nil, "footer links to home page")
-		result = cssSelectorExists(selectors.FooterAboutLink)
-		logTestResult(result, nil, "footer links to about page")
+		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
 
 		result = cssSelectorExists(selectors.EventTitle)
 		logTestResult(result, nil, "has a title")
@@ -314,7 +296,10 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		result = cssSelectorExists(selectors.EventAttendees)
 		logTestResult(result, nil, "has a list of attendees")
 
-		// RSVP test
+		result = cssSelectorExists(selectors.RsvpEmail)
+		logTestResult(result, nil, "has a form to RSVP")
+
+		// test RSVP form
 	}
 
 	// need to test API
