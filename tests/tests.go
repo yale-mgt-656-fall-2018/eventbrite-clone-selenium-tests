@@ -66,8 +66,6 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		randomUser(),
 	}
 
-	doLog("When no user is logged in, your site")
-
 	getEl := func(sel string) (goselenium.Element, error) {
 		return driver.FindElement(goselenium.ByCSSSelector(sel))
 	}
@@ -93,15 +91,245 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	// Navigate to the URL.
 	_, err := driver.Go(testURL)
-	logTestResult(true, err, "should be up and running")
+	logTestResult(true, err, "Site is up and running")
 
 	time.Sleep(sleepDuration)
-	result := cssSelectorExists(selectors.LoginForm)
-	logTestResult(result, nil, "should have a login form")
 
-	result = cssSelectorExists(selectors.RegisterForm)
-	logTestResult(result, nil, "should have a registration form")
+	doLog("Home page:")
 
+	result := cssSelectorExists(selectors.BootstrapHref)
+	logTestResult(result, nil, "looks 💯 ")
+
+	result := cssSelectorExists(selectors.Header)
+	logTestResult(result, nil, "has a header")
+	result := cssSelectorExists(selectors.Footer)
+	logTestResult(result, nil, "has a footer")
+
+	result := cssSelectorExists(selectors.FooterHomeLink)
+	logTestResult(result, nil, "footer links to home page")
+	result := cssSelectorExists(selectors.FooterAboutLink)
+	logTestResult(result, nil, "footer links to about page")
+
+	result := cssSelectorExists(selectors.TeamLogo)
+	logTestResult(result, nil, "has your team logo")
+
+	result := cssSelectorExists(selectors.EventList)
+	logTestResult(result, nil, "shows a list of events")
+
+	// need to test event details
+
+	result := cssSelectorExists(selectors.NewEventLink)
+	logTestResult(result, nil, "has a link to the new event page")
+
+
+	_, err := driver.Go(testURL + "/about")
+
+	if err != nil {
+		doLog("Couldn't load /about, please try again")
+	}
+	else {
+		doLog("About page:")
+		time.Sleep(sleepDuration)
+
+		result := cssSelectorExists(selectors.BootstrapHref)
+		logTestResult(result, nil, "looks 💯 ")
+
+		result := cssSelectorExists(selectors.Header)
+		logTestResult(result, nil, "has a header")
+		result := cssSelectorExists(selectors.Footer)
+		logTestResult(result, nil, "has a footer")
+
+		result := cssSelectorExists(selectors.FooterHomeLink)
+		logTestResult(result, nil, "footer links to home page")
+		result := cssSelectorExists(selectors.FooterAboutLink)
+		logTestResult(result, nil, "footer links to about page")
+
+		result := cssSelectorExists(selectors.Names)
+		logTestResult(result, nil, "has your names")
+
+		result := cssSelectorExists(selectors.Headshots)
+		logTestResult(result, nil, "shows your headshots")
+	}
+
+	_, err := driver.Go(testURL + "/events/new")
+
+	if err != nil {
+		doLog("Couldn't load /events/new, please try again")
+	}
+	else {
+		doLog("New event page:")
+		time.Sleep(sleepDuration)
+
+		result := cssSelectorExists(selectors.BootstrapHref)
+		logTestResult(result, nil, "looks 💯 ")
+
+		result := cssSelectorExists(selectors.Header)
+		logTestResult(result, nil, "has a header")
+		result := cssSelectorExists(selectors.Footer)
+		logTestResult(result, nil, "has a footer")
+
+		result := cssSelectorExists(selectors.FooterHomeLink)
+		logTestResult(result, nil, "footer links to home page")
+		result := cssSelectorExists(selectors.FooterAboutLink)
+		logTestResult(result, nil, "footer links to about page")
+
+		result := cssSelectorExists(selectors.NewEventForm)
+		logTestResult(result, nil, "has a form for event submission")
+
+		titleResult := cssSelectorExists(selectors.NewEventTitle)
+		titleLabelResult := cssSelectorExists(selectors.NewEventTitleLabel)
+		logTestResult(titleResult && titleLabelResult, nil, "has a correctly labeled title field")
+
+		imageResult := cssSelectorExists(selectors.NewEventImage)
+		imageLabelResult := cssSelectorExists(selectors.NewEventImageLabel)
+		logTestResult(imageResult && imageLabelResult, nil, "has a correctly labeled image field")
+
+		locationResult := cssSelectorExists(selectors.NewEventLocation)
+		locationLabelResult := cssSelectorExists(selectors.NewEventLocationLabel)
+		logTestResult(locationResult && locationLabelResult, nil, "has a correctly labeled location field")
+
+		yearResult := cssSelectorExists(selectors.NewEventYear)
+		yearLabelResult := cssSelectorExists(selectors.NewEventYearLabel)
+		// check for correct year options
+		logTestResult(yearResult && yearLabelResult, nil, "has a correctly labeled year field")
+
+		monthResult := cssSelectorExists(selectors.NewEventMonth)
+		monthLabelResult := cssSelectorExists(selectors.NewEventMonthLabel)
+		// check for correct month options
+		logTestResult(monthResult && monthLabelResult, nil, "has a correctly labeled month field")
+
+		dayResult := cssSelectorExists(selectors.NewEventDay)
+		dayLabelResult := cssSelectorExists(selectors.NewEventDayLabel)
+		// check for correct day options
+		logTestResult(dayResult && dayLabelResult, nil, "has a correctly labeled day field")
+
+		hourResult := cssSelectorExists(selectors.NewEventHour)
+		hourLabelResult := cssSelectorExists(selectors.NewEventHourLabel)
+		// check for correct hour options
+		logTestResult(hourResult && hourLabelResult, nil, "has a correctly labeled hour field")
+
+		minuteResult := cssSelectorExists(selectors.NewEventMinute)
+		minuteLabelResult := cssSelectorExists(selectors.NewEventMinuteLabel)
+		// check for correct minute options
+		logTestResult(yearResult && yearLabelResult, nil, "has a correctly labeled minute field")
+
+		// submit a bunch of bad form data
+
+
+	}
+
+	_, err := driver.Go(testURL + "/events/0")
+
+	if err != nil {
+		doLog("Couldn't load /events/0, please try again")
+	}
+	else {
+		doLog("Event 0:")
+		time.Sleep(sleepDuration)
+
+		result := cssSelectorExists(selectors.BootstrapHref)
+		logTestResult(result, nil, "looks 💯 ")
+
+		result := cssSelectorExists(selectors.Header)
+		logTestResult(result, nil, "has a header")
+		result := cssSelectorExists(selectors.Footer)
+		logTestResult(result, nil, "has a footer")
+
+		result := cssSelectorExists(selectors.FooterHomeLink)
+		logTestResult(result, nil, "footer links to home page")
+		result := cssSelectorExists(selectors.FooterAboutLink)
+		logTestResult(result, nil, "footer links to about page")
+
+		result := cssSelectorExists(selectors.EventTitle)
+		logTestResult(result, nil, "has a title")
+		result := cssSelectorExists(selectors.EventDate)
+		logTestResult(result, nil, "has a date")
+		result := cssSelectorExists(selectors.EventLocation)
+		logTestResult(result, nil, "has a location")
+		result := cssSelectorExists(selectors.EventImage)
+		logTestResult(result, nil, "has an image")
+		result := cssSelectorExists(selectors.EventAttendees)
+		logTestResult(result, nil, "has a list of attendees")
+
+		// RSVP test
+	}
+
+	_, err := driver.Go(testURL + "/events/1")
+
+	if err != nil {
+		doLog("Couldn't load /events/1, please try again")
+	}
+	else {
+		doLog("Event 1:")
+		time.Sleep(sleepDuration)
+
+		result := cssSelectorExists(selectors.BootstrapHref)
+		logTestResult(result, nil, "looks 💯 ")
+
+		result := cssSelectorExists(selectors.Header)
+		logTestResult(result, nil, "has a header")
+		result := cssSelectorExists(selectors.Footer)
+		logTestResult(result, nil, "has a footer")
+
+		result := cssSelectorExists(selectors.FooterHomeLink)
+		logTestResult(result, nil, "footer links to home page")
+		result := cssSelectorExists(selectors.FooterAboutLink)
+		logTestResult(result, nil, "footer links to about page")
+
+		result := cssSelectorExists(selectors.EventTitle)
+		logTestResult(result, nil, "has a title")
+		result := cssSelectorExists(selectors.EventDate)
+		logTestResult(result, nil, "has a date")
+		result := cssSelectorExists(selectors.EventLocation)
+		logTestResult(result, nil, "has a location")
+		result := cssSelectorExists(selectors.EventImage)
+		logTestResult(result, nil, "has an image")
+		result := cssSelectorExists(selectors.EventAttendees)
+		logTestResult(result, nil, "has a list of attendees")
+
+		// RSVP test
+	}
+
+	_, err := driver.Go(testURL + "/events/2")
+
+	if err != nil {
+		doLog("Couldn't load /events/2, please try again")
+	}
+	else {
+		doLog("Event 2:")
+		time.Sleep(sleepDuration)
+
+		result := cssSelectorExists(selectors.BootstrapHref)
+		logTestResult(result, nil, "looks 💯 ")
+
+		result := cssSelectorExists(selectors.Header)
+		logTestResult(result, nil, "has a header")
+		result := cssSelectorExists(selectors.Footer)
+		logTestResult(result, nil, "has a footer")
+
+		result := cssSelectorExists(selectors.FooterHomeLink)
+		logTestResult(result, nil, "footer links to home page")
+		result := cssSelectorExists(selectors.FooterAboutLink)
+		logTestResult(result, nil, "footer links to about page")
+
+		result := cssSelectorExists(selectors.EventTitle)
+		logTestResult(result, nil, "has a title")
+		result := cssSelectorExists(selectors.EventDate)
+		logTestResult(result, nil, "has a date")
+		result := cssSelectorExists(selectors.EventLocation)
+		logTestResult(result, nil, "has a location")
+		result := cssSelectorExists(selectors.EventImage)
+		logTestResult(result, nil, "has an image")
+		result := cssSelectorExists(selectors.EventAttendees)
+		logTestResult(result, nil, "has a list of attendees")
+
+		// RSVP test
+	}
+
+	// need to test API
+
+
+	// OLD CODE
 	welcomeCount := countCSSSelector(selectors.Welcome)
 	logTestResult(welcomeCount == 0, nil, "should not be welcoming anybody b/c nobody is logged in!")
 

@@ -11,6 +11,7 @@ const (
 
 	// home
 	TeamLogo     = "img[id=\"logo\"]"
+	EventList    = "ul"
 	Event        = "ul li.event"
 	EventTime    = "li.event time[datetime]"
 	EventTitle   = "li.event.h1" // how to specify title?
