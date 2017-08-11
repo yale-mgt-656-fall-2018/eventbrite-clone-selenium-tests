@@ -1,6 +1,6 @@
-# Social todo automated tests
+# Eventbrite clone automated tests
 
-These are the tests for the social todo.
+These are the tests for the Eventbrite clone.
 
 ## Running the code
 
