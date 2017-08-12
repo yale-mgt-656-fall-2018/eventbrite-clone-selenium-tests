@@ -1,9 +1,9 @@
 package tests
 
 import (
-	"strconv"
 	randomdata "github.com/Pallinder/go-randomdata"
 	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
+	"strconv"
 )
 
 type Event struct {
@@ -15,7 +15,7 @@ type Event struct {
 	day      string
 	hour     string
 	minute   string
-	flaw		 string
+	flaw     string
 }
 
 func randomEvent() Event {
@@ -33,7 +33,7 @@ func randomEvent() Event {
 }
 
 func (e Event) createFormData() map[string]string {
-	data := map[string]string {
+	data := map[string]string{
 		selectors.NewEventTitle:    e.title,
 		selectors.NewEventImage:    e.image,
 		selectors.NewEventLocation: e.location,
@@ -44,6 +44,20 @@ func (e Event) createFormData() map[string]string {
 		selectors.NewEventMinute:   e.minute,
 	}
 	return data
+}
+
+func createFormDataAPITest() Event {
+	e := Event{
+		title:    "Branford I-Day",
+		location: "New Haven, CT",
+		image:    "https://yale.edu/bfa.png",
+		year:     "2017",
+		month:    "7",
+		day:      "4",
+		hour:     "8",
+		minute:   "30",
+	}
+	return e
 }
 
 func getBadEvents() []Event {

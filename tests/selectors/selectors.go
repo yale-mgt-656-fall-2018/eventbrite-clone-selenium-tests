@@ -10,15 +10,15 @@ const (
 	Errors          = "ul[class=\"form-errors\"]"
 
 	// home
-	TeamLogo        = "img[id=\"logo\"][src*=\".png\"]"
+	TeamLogo        = "img[id=\"logo\"][src$=\".png\"]"
 	EventList       = "ul"
-	EventTime       = "li[class=\"event\"][id*=\"event-\"] time[datetime*=\" \"]"
-	EventDetailLink = "li[class=\"event\"][id*=\"event-\"] a[href*=\"/events/\"]" // how to specify title?
+	EventTime       = "li[class=\"event\"][id^=\"event-\"] time[datetime]"
+	EventDetailLink = "li[class=\"event\"][id^=\"event-\"] a[href*=\"/events/\"]" // how to specify title?
 	NewEventLink    = "[id=\"new\"]"
 
 	// about
-	Names     = "span[id*=\"name\"]"    // how to get nickname programatically?
-	Headshots = "img[id*=\"headshot\"]" // ditto
+	Names     = "span[id$=\"-name\"]"    // how to get nickname programatically?
+	Headshots = "img[id$=\"-headshot\"]" // ditto
 
 	// new event
 	NewEventForm          = "form[method=\"POST\"]"
@@ -53,4 +53,7 @@ const (
 	EventAttendees  = "ul[id=\"attendees\"] li[class=\"list-group-item\"]"
 	RsvpEmail       = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
 	RsvpEmailSubmit = "form button[type=\"submit\"]"
+
+	// API
+	APIBody = "body"
 )

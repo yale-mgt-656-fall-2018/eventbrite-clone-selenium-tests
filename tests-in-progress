@@ -1,11 +1,4 @@
 
-  * <span class="note">Grading Note:</span> In the above stories "every page"
-    will refer to the following for testing purposes: `/`, `/about`, `/events/new`, `/events/0`,
-    `/events/1`, `/events/2`. If you have not yet completed a particular page,
-    the page will be skipped. E.g. if you have a `/` page but no `/events/0`
-    page yet and `/` has Bootstrap included, the Bootstrap test will pass.
-    If one of the six pages exists and does not include Bootstrap, the test
-    will not pass.
 * Events that are over are not shown
 * As a user, I can visit your API at `/api/events` and retrieve an object
   with key events containing all events in
@@ -38,13 +31,3 @@
   * If the submitted form is valid, I am redirected to the detail page for that new event.
     This redirect is accomplished using a ["302" HTTP response](http://en.wikipedia.org/wiki/HTTP_302).
     (See the documentation for the [Express.js response redirect method](http://expressjs.com/api.html#res.redirect))
-
-  * If the form was not valid, I am taken back the form and the errors are shown on the form.
-    * The errors should be enumerated in a `ul` element with `class="form-errors"`
-    * That `ul` element should have `li` elements for each error. For example, your errors
-      may look like this
-      ```markup
-        <ul class="form-errors">
-          <li>Error, the title must be between 0 and 50 characters</li>
-        </ul>
-      ```

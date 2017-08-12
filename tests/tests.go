@@ -3,8 +3,11 @@ package tests
 import (
 	"fmt"
 	"log"
+	// "net/http"
 	// "net/url"
 	"time"
+	"encoding/json"
+	"strings"
 
 	goselenium "github.com/bunsenapp/go-selenium"
 	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
@@ -82,16 +85,24 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	// 	}
 	// 	return true
 	// }
+	// getAllElementsWithSelector := func(sel string) []goselenium.Element {
+	// 	elements, xerr := driver.FindElements(goselenium.ByCSSSelector(sel))
+	// 	if xerr == nil {
+	// 		return elements
+	// 	}
+	// 	return nil
+	// }
 
 	_, err := driver.Go(testURL)
-	logTestResult(true, err, "Site is up and running")
 
 	hi := randomEvent()
 	hi.createFormData()
 
 	time.Sleep(sleepDuration)
 
-	doLog("Home page:")
+	doLog("\nHome page:")
+
+	logTestResult(true, err, "Site is up and running")
 
 	result := cssSelectorExists(selectors.BootstrapHref)
 	logTestResult(result, nil, "looks 💯  with Bootstrap CSS ")
@@ -119,268 +130,289 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	result = cssSelectorExists(selectors.NewEventLink)
 	logTestResult(result, nil, "has a link to the new event page")
 
-
 	_, err = driver.Go(testURL + "/about")
 
-	if err != nil {
-		doLog("Couldn't load /about, please try again")
-	} else {
-		doLog("About page:")
-		time.Sleep(sleepDuration)
+	doLog("\nAbout page:")
+	time.Sleep(sleepDuration)
 
-		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
-		headerResult := cssSelectorExists(selectors.Header)
-		footerResult := cssSelectorExists(selectors.Footer)
-		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
-		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
+	bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
+	headerResult := cssSelectorExists(selectors.Header)
+	footerResult := cssSelectorExists(selectors.Footer)
+	footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
+	footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
 
-		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
+	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
 
-		result = cssSelectorExists(selectors.Names)
-		logTestResult(result, nil, "has your names")
+	result = cssSelectorExists(selectors.Names)
+	logTestResult(result, nil, "has your names")
 
-		result = cssSelectorExists(selectors.Headshots)
-		logTestResult(result, nil, "shows your headshots")
-	}
-
-	_, err = driver.Go(testURL + "/events/new")
-
-	if err != nil {
-		doLog("Couldn't load /events/new, please try again")
-	} else {
-		doLog("New event page:")
-		time.Sleep(sleepDuration)
-
-		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
-		headerResult := cssSelectorExists(selectors.Header)
-		footerResult := cssSelectorExists(selectors.Footer)
-		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
-		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
-
-		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
-
-		result = cssSelectorExists(selectors.NewEventForm)
-		logTestResult(result, nil, "has a form for event submission")
-
-		titleResult := cssSelectorExists(selectors.NewEventTitle)
-		titleLabelResult := cssSelectorExists(selectors.NewEventTitleLabel)
-		logTestResult(titleResult && titleLabelResult, nil, "has a correctly labeled title field")
-
-		imageResult := cssSelectorExists(selectors.NewEventImage)
-		imageLabelResult := cssSelectorExists(selectors.NewEventImageLabel)
-		logTestResult(imageResult && imageLabelResult, nil, "has a correctly labeled image field")
-
-		locationResult := cssSelectorExists(selectors.NewEventLocation)
-		locationLabelResult := cssSelectorExists(selectors.NewEventLocationLabel)
-		logTestResult(locationResult && locationLabelResult, nil, "has a correctly labeled location field")
-
-		yearResult := cssSelectorExists(selectors.NewEventYear)
-		yearLabelResult := cssSelectorExists(selectors.NewEventYearLabel)
-		yearOptionResult := countCSSSelector(selectors.NewEventYearOption)
-		logTestResult(yearResult && yearLabelResult && yearOptionResult == 2, nil, "has a correctly labeled year field")
-
-		monthResult := cssSelectorExists(selectors.NewEventMonth)
-		monthLabelResult := cssSelectorExists(selectors.NewEventMonthLabel)
-		monthOptionResult := countCSSSelector(selectors.NewEventMonthOption)
-		logTestResult(monthResult && monthLabelResult && monthOptionResult == 12, nil, "has a labeled month field with correct options")
-
-		dayResult := cssSelectorExists(selectors.NewEventDay)
-		dayLabelResult := cssSelectorExists(selectors.NewEventDayLabel)
-		dayOptionResult := countCSSSelector(selectors.NewEventDayOption)
-		logTestResult(dayResult && dayLabelResult && dayOptionResult == 31, nil, "has a labeled day field with correct options")
-
-		hourResult := cssSelectorExists(selectors.NewEventHour)
-		hourLabelResult := cssSelectorExists(selectors.NewEventHourLabel)
-		hourOptionResult := countCSSSelector(selectors.NewEventHourOption)
-		logTestResult(hourResult && hourLabelResult && hourOptionResult == 24, nil, "has a labeled hour field with correct options")
-
-		minuteResult := cssSelectorExists(selectors.NewEventMinute)
-		minuteLabelResult := cssSelectorExists(selectors.NewEventMinuteLabel)
-		minuteOptionResult := countCSSSelector(selectors.NewEventMinuteOption)
-		logTestResult(minuteResult && minuteLabelResult && minuteOptionResult == 2, nil, "has a labeled minute field with correct options")
-
-		badEvents := getBadEvents()
-		for _, event := range badEvents {
-			msg := "should not allow event with " + event.flaw
-			err2 := fillEventForm(driver, testURL + "/events/new", event)
-			time.Sleep(sleepDuration)
-			if err2 == nil {
-				result = cssSelectorExists(selectors.Errors)
-			}
-			logTestResult(result, err2, msg)
-		}
-		// submit bad form data
-		// and good form data? could submit something known for API call
-		// how to check for correct options, not just count?
-
-	}
+	result = cssSelectorExists(selectors.Headshots)
+	logTestResult(result, nil, "shows your headshots")
 
 	_, err = driver.Go(testURL + "/events/0")
 
-	if err != nil {
-		doLog("Couldn't load /events/0, please try again")
-	} else {
-		doLog("Event 0:")
+	doLog("\nEvent 0:")
+	time.Sleep(sleepDuration)
+
+	bootstrapResult = cssSelectorExists(selectors.BootstrapHref)
+	headerResult = cssSelectorExists(selectors.Header)
+	footerResult = cssSelectorExists(selectors.Footer)
+	footerHomeLinkResult = cssSelectorExists(selectors.FooterHomeLink)
+	footerAboutLinkResult = cssSelectorExists(selectors.FooterAboutLink)
+
+	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
+
+	result = cssSelectorExists(selectors.EventTitle)
+	logTestResult(result, nil, "has a title")
+	result = cssSelectorExists(selectors.EventDate)
+	logTestResult(result, nil, "has a date")
+	result = cssSelectorExists(selectors.EventLocation)
+	logTestResult(result, nil, "has a location")
+	result = cssSelectorExists(selectors.EventImage)
+	logTestResult(result, nil, "has an image")
+	result = cssSelectorExists(selectors.EventAttendees)
+	logTestResult(result, nil, "has a list of attendees")
+
+	result = cssSelectorExists(selectors.RsvpEmail)
+	logTestResult(result, nil, "has a form to RSVP")
+
+	badRsvps := getBadRsvps()
+	for _, rsvp := range badRsvps {
+		msg := "should not allow RSVP with " + rsvp.flaw
+		err2 := fillRSVPForm(driver, testURL+"/events/0", rsvp)
 		time.Sleep(sleepDuration)
-
-		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
-		headerResult := cssSelectorExists(selectors.Header)
-		footerResult := cssSelectorExists(selectors.Footer)
-		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
-		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
-
-		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
-
-		result = cssSelectorExists(selectors.EventTitle)
-		logTestResult(result, nil, "has a title")
-		result = cssSelectorExists(selectors.EventDate)
-		logTestResult(result, nil, "has a date")
-		result = cssSelectorExists(selectors.EventLocation)
-		logTestResult(result, nil, "has a location")
-		result = cssSelectorExists(selectors.EventImage)
-		logTestResult(result, nil, "has an image")
-		result = cssSelectorExists(selectors.EventAttendees)
-		logTestResult(result, nil, "has a list of attendees")
-
-		result = cssSelectorExists(selectors.RsvpEmail)
-		logTestResult(result, nil, "has a form to RSVP")
-
-		badRsvps := getBadRsvps()
-		for _, rsvp := range badRsvps {
-			msg := "should not allow RSVP with " + rsvp.flaw
-			err2 := fillRSVPForm(driver, testURL + "/events/0", rsvp)
-			time.Sleep(sleepDuration)
-			if err2 == nil {
-				result = cssSelectorExists(selectors.Errors)
-			}
-			logTestResult(result, err2, msg)
+		if err2 == nil {
+			result = cssSelectorExists(selectors.Errors)
 		}
+		logTestResult(result, err2, msg)
+	}
 
-		goodRsvps := getGoodRsvps()
-		for _, rsvp := range goodRsvps {
-			originalRsvps := countCSSSelector(selectors.EventAttendees)
-			msg := "should allow RSVP with " + rsvp.flaw
-			err2 := fillRSVPForm(driver, testURL + "/events/0", rsvp)
-			time.Sleep(sleepDuration)
-			if err2 == nil {
-				newRsvps := countCSSSelector(selectors.EventAttendees)
-				result = (newRsvps == originalRsvps + 1)
-			}
-			logTestResult(result, err2, msg)
+	goodRsvps := getGoodRsvps()
+	for _, rsvp := range goodRsvps {
+		originalRsvps := countCSSSelector(selectors.EventAttendees)
+		msg := "should allow RSVP with " + rsvp.flaw
+		err2 := fillRSVPForm(driver, testURL+"/events/0", rsvp)
+		time.Sleep(sleepDuration)
+		if err2 == nil {
+			newRsvps := countCSSSelector(selectors.EventAttendees)
+			result = (newRsvps == originalRsvps+1)
 		}
+		logTestResult(result, err2, msg)
 	}
 
 	_, err = driver.Go(testURL + "/events/1")
 
-	if err != nil {
-		doLog("Couldn't load /events/1, please try again")
-	} else {
-		doLog("Event 1:")
+	doLog("\nEvent 1:")
+	time.Sleep(sleepDuration)
+
+	bootstrapResult = cssSelectorExists(selectors.BootstrapHref)
+	headerResult = cssSelectorExists(selectors.Header)
+	footerResult = cssSelectorExists(selectors.Footer)
+	footerHomeLinkResult = cssSelectorExists(selectors.FooterHomeLink)
+	footerAboutLinkResult = cssSelectorExists(selectors.FooterAboutLink)
+
+	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
+
+	result = cssSelectorExists(selectors.EventTitle)
+	logTestResult(result, nil, "has a title")
+	result = cssSelectorExists(selectors.EventDate)
+	logTestResult(result, nil, "has a date")
+	result = cssSelectorExists(selectors.EventLocation)
+	logTestResult(result, nil, "has a location")
+	result = cssSelectorExists(selectors.EventImage)
+	logTestResult(result, nil, "has an image")
+	result = cssSelectorExists(selectors.EventAttendees)
+	logTestResult(result, nil, "has a list of attendees")
+
+	result = cssSelectorExists(selectors.RsvpEmail)
+	logTestResult(result, nil, "has a form to RSVP")
+
+	badRsvps = getBadRsvps()
+	for _, rsvp := range badRsvps {
+		msg := "should not allow RSVP with " + rsvp.flaw
+		err2 := fillRSVPForm(driver, testURL+"/events/1", rsvp)
 		time.Sleep(sleepDuration)
-
-		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
-		headerResult := cssSelectorExists(selectors.Header)
-		footerResult := cssSelectorExists(selectors.Footer)
-		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
-		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
-
-		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
-
-		result = cssSelectorExists(selectors.EventTitle)
-		logTestResult(result, nil, "has a title")
-		result = cssSelectorExists(selectors.EventDate)
-		logTestResult(result, nil, "has a date")
-		result = cssSelectorExists(selectors.EventLocation)
-		logTestResult(result, nil, "has a location")
-		result = cssSelectorExists(selectors.EventImage)
-		logTestResult(result, nil, "has an image")
-		result = cssSelectorExists(selectors.EventAttendees)
-		logTestResult(result, nil, "has a list of attendees")
-
-		result = cssSelectorExists(selectors.RsvpEmail)
-		logTestResult(result, nil, "has a form to RSVP")
-
-		badRsvps := getBadRsvps()
-		for _, rsvp := range badRsvps {
-			msg := "should not allow RSVP with " + rsvp.flaw
-			err2 := fillRSVPForm(driver, testURL + "/events/1", rsvp)
-			time.Sleep(sleepDuration)
-			if err2 == nil {
-				result = cssSelectorExists(selectors.Errors)
-			}
-			logTestResult(result, err2, msg)
+		if err2 == nil {
+			result = cssSelectorExists(selectors.Errors)
 		}
+		logTestResult(result, err2, msg)
+	}
 
-		goodRsvps := getGoodRsvps()
-		for _, rsvp := range goodRsvps {
-			originalRsvps := countCSSSelector(selectors.EventAttendees)
-			msg := "should allow RSVP with " + rsvp.flaw
-			err2 := fillRSVPForm(driver, testURL + "/events/1", rsvp)
-			time.Sleep(sleepDuration)
-			if err2 == nil {
-				newRsvps := countCSSSelector(selectors.EventAttendees)
-				result = (newRsvps == originalRsvps + 1)
-			}
-			logTestResult(result, err2, msg)
+	goodRsvps = getGoodRsvps()
+	for _, rsvp := range goodRsvps {
+		originalRsvps := countCSSSelector(selectors.EventAttendees)
+		msg := "should allow RSVP with " + rsvp.flaw
+		err2 := fillRSVPForm(driver, testURL+"/events/1", rsvp)
+		time.Sleep(sleepDuration)
+		if err2 == nil {
+			newRsvps := countCSSSelector(selectors.EventAttendees)
+			result = (newRsvps == originalRsvps+1)
 		}
+		logTestResult(result, err2, msg)
 	}
 
 	_, err = driver.Go(testURL + "/events/2")
 
-	if err != nil {
-		doLog("Couldn't load /events/2, please try again")
-	} else {
-		doLog("Event 2:")
+	doLog("\nEvent 2:")
+	time.Sleep(sleepDuration)
+
+	bootstrapResult = cssSelectorExists(selectors.BootstrapHref)
+	headerResult = cssSelectorExists(selectors.Header)
+	footerResult = cssSelectorExists(selectors.Footer)
+	footerHomeLinkResult = cssSelectorExists(selectors.FooterHomeLink)
+	footerAboutLinkResult = cssSelectorExists(selectors.FooterAboutLink)
+
+	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
+
+	result = cssSelectorExists(selectors.EventTitle)
+	logTestResult(result, nil, "has a title")
+	result = cssSelectorExists(selectors.EventDate)
+	logTestResult(result, nil, "has a date")
+	result = cssSelectorExists(selectors.EventLocation)
+	logTestResult(result, nil, "has a location")
+	result = cssSelectorExists(selectors.EventImage)
+	logTestResult(result, nil, "has an image")
+	result = cssSelectorExists(selectors.EventAttendees)
+	logTestResult(result, nil, "has a list of attendees")
+
+	result = cssSelectorExists(selectors.RsvpEmail)
+	logTestResult(result, nil, "has a form to RSVP")
+
+	badRsvps = getBadRsvps()
+	for _, rsvp := range badRsvps {
+		msg := "should not allow RSVP with " + rsvp.flaw
+		err2 := fillRSVPForm(driver, testURL+"/events/2", rsvp)
 		time.Sleep(sleepDuration)
-
-		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
-		headerResult := cssSelectorExists(selectors.Header)
-		footerResult := cssSelectorExists(selectors.Footer)
-		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
-		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
-
-		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
-
-		result = cssSelectorExists(selectors.EventTitle)
-		logTestResult(result, nil, "has a title")
-		result = cssSelectorExists(selectors.EventDate)
-		logTestResult(result, nil, "has a date")
-		result = cssSelectorExists(selectors.EventLocation)
-		logTestResult(result, nil, "has a location")
-		result = cssSelectorExists(selectors.EventImage)
-		logTestResult(result, nil, "has an image")
-		result = cssSelectorExists(selectors.EventAttendees)
-		logTestResult(result, nil, "has a list of attendees")
-
-		result = cssSelectorExists(selectors.RsvpEmail)
-		logTestResult(result, nil, "has a form to RSVP")
-
-		badRsvps := getBadRsvps()
-		for _, rsvp := range badRsvps {
-			msg := "should not allow RSVP with " + rsvp.flaw
-			err2 := fillRSVPForm(driver, testURL + "/events/2", rsvp)
-			time.Sleep(sleepDuration)
-			if err2 == nil {
-				result = cssSelectorExists(selectors.Errors)
-			}
-			logTestResult(result, err2, msg)
+		if err2 == nil {
+			result = cssSelectorExists(selectors.Errors)
 		}
-
-		goodRsvps := getGoodRsvps()
-		for _, rsvp := range goodRsvps {
-			originalRsvps := countCSSSelector(selectors.EventAttendees)
-			msg := "should allow RSVP with " + rsvp.flaw
-			err2 := fillRSVPForm(driver, testURL + "/events/2", rsvp)
-			time.Sleep(sleepDuration)
-			if err2 == nil {
-				newRsvps := countCSSSelector(selectors.EventAttendees)
-				result = (newRsvps == originalRsvps + 1)
-			}
-			logTestResult(result, err2, msg)
-		}
+		logTestResult(result, err2, msg)
 	}
 
-	// need to test API
+	goodRsvps = getGoodRsvps()
+	for _, rsvp := range goodRsvps {
+		originalRsvps := countCSSSelector(selectors.EventAttendees)
+		msg := "should allow RSVP with " + rsvp.flaw
+		err2 := fillRSVPForm(driver, testURL+"/events/2", rsvp)
+		time.Sleep(sleepDuration)
+		if err2 == nil {
+			newRsvps := countCSSSelector(selectors.EventAttendees)
+			result = (newRsvps == originalRsvps+1)
+		}
+		logTestResult(result, err2, msg)
+	}
+
+	_, err = driver.Go(testURL + "/events/new")
+
+	doLog("\nNew event page:")
+	time.Sleep(sleepDuration)
+
+	bootstrapResult = cssSelectorExists(selectors.BootstrapHref)
+	headerResult = cssSelectorExists(selectors.Header)
+	footerResult = cssSelectorExists(selectors.Footer)
+	footerHomeLinkResult = cssSelectorExists(selectors.FooterHomeLink)
+	footerAboutLinkResult = cssSelectorExists(selectors.FooterAboutLink)
+
+	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
+
+	result = cssSelectorExists(selectors.NewEventForm)
+	logTestResult(result, nil, "has a form for event submission")
+
+	titleResult := cssSelectorExists(selectors.NewEventTitle)
+	titleLabelResult := cssSelectorExists(selectors.NewEventTitleLabel)
+	logTestResult(titleResult && titleLabelResult, nil, "has a correctly labeled title field")
+
+	imageResult := cssSelectorExists(selectors.NewEventImage)
+	imageLabelResult := cssSelectorExists(selectors.NewEventImageLabel)
+	logTestResult(imageResult && imageLabelResult, nil, "has a correctly labeled image field")
+
+	locationResult := cssSelectorExists(selectors.NewEventLocation)
+	locationLabelResult := cssSelectorExists(selectors.NewEventLocationLabel)
+	logTestResult(locationResult && locationLabelResult, nil, "has a correctly labeled location field")
+
+	yearResult := cssSelectorExists(selectors.NewEventYear)
+	yearLabelResult := cssSelectorExists(selectors.NewEventYearLabel)
+	yearOptionResult := countCSSSelector(selectors.NewEventYearOption)
+	logTestResult(yearResult && yearLabelResult && yearOptionResult == 2, nil, "has a labeled year field with correct options")
+
+	monthResult := cssSelectorExists(selectors.NewEventMonth)
+	monthLabelResult := cssSelectorExists(selectors.NewEventMonthLabel)
+	monthOptionResult := countCSSSelector(selectors.NewEventMonthOption)
+	logTestResult(monthResult && monthLabelResult && monthOptionResult == 12, nil, "has a labeled month field with correct options")
+
+	dayResult := cssSelectorExists(selectors.NewEventDay)
+	dayLabelResult := cssSelectorExists(selectors.NewEventDayLabel)
+	dayOptionResult := countCSSSelector(selectors.NewEventDayOption)
+	logTestResult(dayResult && dayLabelResult && dayOptionResult == 31, nil, "has a labeled day field with correct options")
+
+	hourResult := cssSelectorExists(selectors.NewEventHour)
+	hourLabelResult := cssSelectorExists(selectors.NewEventHourLabel)
+	hourOptionResult := countCSSSelector(selectors.NewEventHourOption)
+	logTestResult(hourResult && hourLabelResult && hourOptionResult == 24, nil, "has a labeled hour field with correct options")
+
+	minuteResult := cssSelectorExists(selectors.NewEventMinute)
+	minuteLabelResult := cssSelectorExists(selectors.NewEventMinuteLabel)
+	minuteOptionResult := countCSSSelector(selectors.NewEventMinuteOption)
+	logTestResult(minuteResult && minuteLabelResult && minuteOptionResult == 2, nil, "has a labeled minute field with correct options")
+
+	badEvents := getBadEvents()
+	for _, event := range badEvents {
+		msg := "should not allow event with " + event.flaw
+		err2 := fillEventForm(driver, testURL+"/events/new", event)
+		time.Sleep(sleepDuration)
+		if err2 == nil {
+			result = cssSelectorExists(selectors.Errors)
+		}
+		logTestResult(result, err2, msg)
+	}
+
+	apiTestData := createFormDataAPITest()
+	msg := "should allow event with legal parameters"
+	err2 := fillEventForm(driver, testURL+"/events/new", apiTestData)
+	time.Sleep(sleepDuration)
+	if err2 == nil {
+		result = cssSelectorExists(selectors.RsvpEmail)
+		// this isn't checking for HTTP status codes
+	}
+	logTestResult(result, err2, msg)
+
+	// how to check for correct options, not just count?
+
+	_, err = driver.Go(testURL + "/api/events")
+	doLog("\nAPI:")
+	time.Sleep(sleepDuration)
+
+	body, err := driver.PageSource()
+
+	strbody := body.Source
+
+	strbody = strings.SplitAfter(strbody, "<body>")[1]
+	strbody = strings.SplitAfter(strbody, ">")[1]
+	strbody = strings.SplitAfter(strbody, "</body>")[0]
+	strbody = strings.Split(strbody, "</")[0]
+
+	type EventJSON struct {
+		ID int `json:"id"`
+		Title string `json:"title"`
+		Date string `json:"date"`
+		Image string `json:"image"`
+		Location string `json:"location"`
+		Attending []string `json:"attending"`
+	}
+
+	type APIResponse struct {
+		Events []EventJSON `json:"events"`
+	}
+
+	// fmt.Println(strbody)
+
+	bodyBytes := []byte(strbody)
+	var r = new(APIResponse)
+	json.Unmarshal(bodyBytes, &r)
+
+	for _, event := range r.Events {
+		fmt.Printf("%+v\n", event)
+	}
 
 
 	// OLD CODE
