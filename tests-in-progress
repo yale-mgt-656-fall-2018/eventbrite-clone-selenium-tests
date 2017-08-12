@@ -35,14 +35,6 @@
     * The hour select should be in 24-hour time format: 0-23 are selectable.
     * The month select should have integer value attributes, numbered 0-11, and refer to months by their names: January, February, etc.
     * You should only be able to schedule events in 2015 and 2016
-  * When submitted, the form should be validated:
-    * The image URL must begin with ‘http://’ or ‘https://’ and end with ‘.gif’ or ‘.png’.
-    * The title must be less than 50 characters
-    * The location must be less than 50 characters
-    * The year must be 2015 or 2016
-    * The month must be between 0 to 11, inclusive
-    * The hour must be 0-23
-    * The minute must be 0 or 30
   * If the submitted form is valid, I am redirected to the detail page for that new event.
     This redirect is accomplished using a ["302" HTTP response](http://en.wikipedia.org/wiki/HTTP_302).
     (See the documentation for the [Express.js response redirect method](http://expressjs.com/api.html#res.redirect))

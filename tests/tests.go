@@ -86,6 +86,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	_, err := driver.Go(testURL)
 	logTestResult(true, err, "Site is up and running")
 
+	hi := randomEvent()
+	hi.createFormData()
+
 	time.Sleep(sleepDuration)
 
 	doLog("Home page:")
@@ -196,8 +199,8 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		minuteOptionResult := countCSSSelector(selectors.NewEventMinuteOption)
 		logTestResult(minuteResult && minuteLabelResult && minuteOptionResult == 2, nil, "has a labeled minute field with correct options")
 
-		// submit a bunch of bad form data
-
+		// submit bad form data
+		// and good form data? could submit something known for API call
 		// how to check for correct options, not just count?
 
 	}
