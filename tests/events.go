@@ -34,8 +34,8 @@ func randomEvent() Event {
 func (e Event) createFormData() map[string]string {
 	data := map[string]string {
 		selectors.NewEventTitle:    e.title,
-		// selectors.NewEventImage:    e.image,
-		// selectors.NewEventLocation: e.location,
+		selectors.NewEventImage:    e.image,
+		selectors.NewEventLocation: e.location,
 		// selectors.NewEventYear:     e.year,
 		// selectors.NewEventMonth:    e.month,
 		// selectors.NewEventDay:      e.day,

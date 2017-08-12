@@ -171,28 +171,28 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 		yearResult := cssSelectorExists(selectors.NewEventYear)
 		yearLabelResult := cssSelectorExists(selectors.NewEventYearLabel)
-		// check for correct year options
-		logTestResult(yearResult && yearLabelResult, nil, "has a correctly labeled year field")
+		yearOptionResult := countCSSSelector(selectors.NewEventYearOption)
+		logTestResult(yearResult && yearLabelResult && yearOptionResult == 2, nil, "has a correctly labeled year field")
 
 		monthResult := cssSelectorExists(selectors.NewEventMonth)
 		monthLabelResult := cssSelectorExists(selectors.NewEventMonthLabel)
-		// check for correct month options
-		logTestResult(monthResult && monthLabelResult, nil, "has a correctly labeled month field")
+		monthOptionResult := countCSSSelector(selectors.NewEventMonthOption)
+		logTestResult(monthResult && monthLabelResult && monthOptionResult == 12, nil, "has a labeled month field with correct options")
 
 		dayResult := cssSelectorExists(selectors.NewEventDay)
 		dayLabelResult := cssSelectorExists(selectors.NewEventDayLabel)
-		// check for correct day options
-		logTestResult(dayResult && dayLabelResult, nil, "has a correctly labeled day field")
+		dayOptionResult := countCSSSelector(selectors.NewEventDayOption)
+		logTestResult(dayResult && dayLabelResult && dayOptionResult == 31, nil, "has a labeled day field with correct options")
 
 		hourResult := cssSelectorExists(selectors.NewEventHour)
 		hourLabelResult := cssSelectorExists(selectors.NewEventHourLabel)
-		// check for correct hour options
-		logTestResult(hourResult && hourLabelResult, nil, "has a correctly labeled hour field")
+		hourOptionResult := countCSSSelector(selectors.NewEventHourOption)
+		logTestResult(hourResult && hourLabelResult && hourOptionResult == 24, nil, "has a labeled hour field with correct options")
 
 		minuteResult := cssSelectorExists(selectors.NewEventMinute)
 		minuteLabelResult := cssSelectorExists(selectors.NewEventMinuteLabel)
-		// check for correct minute options
-		logTestResult(minuteResult && minuteLabelResult, nil, "has a correctly labeled minute field")
+		minuteOptionResult := countCSSSelector(selectors.NewEventMinuteOption)
+		logTestResult(minuteResult && minuteLabelResult && minuteOptionResult == 2, nil, "has a labeled minute field with correct options")
 
 		// submit a bunch of bad form data
 
@@ -283,7 +283,29 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		result = cssSelectorExists(selectors.RsvpEmail)
 		logTestResult(result, nil, "has a form to RSVP")
 
-		// test RSVP form
+		badRsvps := getBadRsvps()
+		for _, rsvp := range badRsvps {
+			msg := "should not allow RSVP with " + rsvp.flaw
+			err2 := fillRSVPForm(driver, testURL + "/events/1", rsvp)
+			time.Sleep(sleepDuration)
+			if err2 == nil {
+				result = cssSelectorExists(selectors.Errors)
+			}
+			logTestResult(result, err2, msg)
+		}
+
+		goodRsvps := getGoodRsvps()
+		for _, rsvp := range goodRsvps {
+			originalRsvps := countCSSSelector(selectors.EventAttendees)
+			msg := "should allow RSVP with " + rsvp.flaw
+			err2 := fillRSVPForm(driver, testURL + "/events/1", rsvp)
+			time.Sleep(sleepDuration)
+			if err2 == nil {
+				newRsvps := countCSSSelector(selectors.EventAttendees)
+				result = (newRsvps == originalRsvps + 1)
+			}
+			logTestResult(result, err2, msg)
+		}
 	}
 
 	_, err = driver.Go(testURL + "/events/2")
@@ -316,7 +338,29 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		result = cssSelectorExists(selectors.RsvpEmail)
 		logTestResult(result, nil, "has a form to RSVP")
 
-		// test RSVP form
+		badRsvps := getBadRsvps()
+		for _, rsvp := range badRsvps {
+			msg := "should not allow RSVP with " + rsvp.flaw
+			err2 := fillRSVPForm(driver, testURL + "/events/2", rsvp)
+			time.Sleep(sleepDuration)
+			if err2 == nil {
+				result = cssSelectorExists(selectors.Errors)
+			}
+			logTestResult(result, err2, msg)
+		}
+
+		goodRsvps := getGoodRsvps()
+		for _, rsvp := range goodRsvps {
+			originalRsvps := countCSSSelector(selectors.EventAttendees)
+			msg := "should allow RSVP with " + rsvp.flaw
+			err2 := fillRSVPForm(driver, testURL + "/events/2", rsvp)
+			time.Sleep(sleepDuration)
+			if err2 == nil {
+				newRsvps := countCSSSelector(selectors.EventAttendees)
+				result = (newRsvps == originalRsvps + 1)
+			}
+			logTestResult(result, err2, msg)
+		}
 	}
 
 	// need to test API
