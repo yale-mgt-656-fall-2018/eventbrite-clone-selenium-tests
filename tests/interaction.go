@@ -45,6 +45,15 @@ func submitTaskForm(driver goselenium.WebDriver, testURL string, event Event) er
 	return err2
 }
 
+func fillRSVPForm(driver goselenium.WebDriver, testURL string, rsvp RSVP) error {
+	err2 := loadHome(driver, testURL)
+	if err2 != nil {
+		return err2
+	}
+	err2 = submitForm(driver, selectors.RsvpEmail, rsvp.sendRSVP(), selectors.RsvpEmailSubmit)
+	return err2
+}
+
 func loadHome(driver goselenium.WebDriver, targetURL string) error {
 	const script = `
     var forms = document.getElementsByTagName('form');

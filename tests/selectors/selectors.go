@@ -46,6 +46,7 @@ const (
 	EventDate      = "span[id=\"date\"]"
 	EventLocation  = "span[id=\"location\"]"
 	EventImage     = "[id=\"image\"]"
-	EventAttendees = "ul[id=\"attendees\"]"
-	RsvpEmail      = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
+	EventAttendees = "ul[id=\"attendees\"] li[class=\"list-group-item\"]"
+	RsvpEmail      = "form input[id=\"email\"]"
+	RsvpEmailSubmit= "form button[type=\"submit\"]"
 )

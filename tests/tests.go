@@ -123,18 +123,13 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		doLog("About page:")
 		time.Sleep(sleepDuration)
 
-		result = cssSelectorExists(selectors.BootstrapHref)
-		logTestResult(result, nil, "looks 💯  with Bootstrap CSS ")
+		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
+		headerResult := cssSelectorExists(selectors.Header)
+		footerResult := cssSelectorExists(selectors.Footer)
+		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
+		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
 
-		result = cssSelectorExists(selectors.Header)
-		logTestResult(result, nil, "has a header")
-		result = cssSelectorExists(selectors.Footer)
-		logTestResult(result, nil, "has a footer")
-
-		result = cssSelectorExists(selectors.FooterHomeLink)
-		logTestResult(result, nil, "footer links to home page")
-		result = cssSelectorExists(selectors.FooterAboutLink)
-		logTestResult(result, nil, "footer links to about page")
+		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
 
 		result = cssSelectorExists(selectors.Names)
 		logTestResult(result, nil, "has your names")
@@ -233,7 +228,29 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		result = cssSelectorExists(selectors.RsvpEmail)
 		logTestResult(result, nil, "has a form to RSVP")
 
-		// test RSVP form
+		badRsvps := getBadRsvps()
+		for _, rsvp := range badRsvps {
+			msg := "should not allow RSVP with " + rsvp.flaw
+			err2 := fillRSVPForm(driver, testURL + "/events/0", rsvp)
+			time.Sleep(sleepDuration)
+			if err2 == nil {
+				result = cssSelectorExists(selectors.Errors)
+			}
+			logTestResult(result, err2, msg)
+		}
+
+		goodRsvps := getGoodRsvps()
+		for _, rsvp := range goodRsvps {
+			originalRsvps := countCSSSelector(selectors.EventAttendees)
+			msg := "should allow RSVP with " + rsvp.flaw
+			err2 := fillRSVPForm(driver, testURL + "/events/0", rsvp)
+			time.Sleep(sleepDuration)
+			if err2 == nil {
+				newRsvps := countCSSSelector(selectors.EventAttendees)
+				result = (newRsvps == originalRsvps + 1)
+			}
+			logTestResult(result, err2, msg)
+		}
 	}
 
 	_, err = driver.Go(testURL + "/events/1")
