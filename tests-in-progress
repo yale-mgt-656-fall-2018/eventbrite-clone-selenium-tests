@@ -1,28 +1,5 @@
 
 * Events that are over are not shown
-* As a user, I can visit your API at `/api/events` and retrieve an object
-  with key events containing all events in
-  [JSON](http://en.wikipedia.org/wiki/JSON) format. For example, the
-  response may look akin to the following:
-```javascript
-  {
-    events: [
-      {
-        id: 0,
-        title: "...",
-        location: "...",
-        ...
-      },
-      {
-        id: 1,
-        title: "...",
-        location: "...",
-        ...
-      },
-    ]
-  }
-```
-  * I can search for events by submitting a GET request to a URL like `/api/events?search=beach` and only receive back events that have ‘beach’ in the event title.
 * As a user I can visit your page for creating new events at `/events/new`
     * The minute should only have 0, and 30 as selections. (At the hour and half hour).
     * The hour select should be in 24-hour time format: 0-23 are selectable.

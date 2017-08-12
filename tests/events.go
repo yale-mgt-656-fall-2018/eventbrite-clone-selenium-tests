@@ -48,7 +48,7 @@ func (e Event) createFormData() map[string]string {
 
 func createFormDataAPITest() Event {
 	e := Event{
-		title:    "Branford I-Day",
+		title:    randomString(45),
 		location: "New Haven, CT",
 		image:    "https://yale.edu/bfa.png",
 		year:     "2017",

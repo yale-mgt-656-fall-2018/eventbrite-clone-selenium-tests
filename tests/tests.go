@@ -3,8 +3,6 @@ package tests
 import (
 	"fmt"
 	"log"
-	// "net/http"
-	// "net/url"
 	"time"
 	"encoding/json"
 	"strings"
@@ -63,9 +61,6 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		}
 	}
 
-	// getEl := func(sel string) (goselenium.Element, error) {
-	// 	return driver.FindElement(goselenium.ByCSSSelector(sel))
-	// }
 	countCSSSelector := func(sel string) int {
 		elements, xerr := driver.FindElements(goselenium.ByCSSSelector(sel))
 		if xerr == nil {
@@ -77,21 +72,6 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		count := countCSSSelector(sel)
 		return (count != 0)
 	}
-	// cssSelectorsExists := func(sels ...string) bool {
-	// 	for _, sel := range sels {
-	// 		if cssSelectorExists(sel) == false {
-	// 			return false
-	// 		}
-	// 	}
-	// 	return true
-	// }
-	// getAllElementsWithSelector := func(sel string) []goselenium.Element {
-	// 	elements, xerr := driver.FindElements(goselenium.ByCSSSelector(sel))
-	// 	if xerr == nil {
-	// 		return elements
-	// 	}
-	// 	return nil
-	// }
 
 	_, err := driver.Go(testURL)
 
@@ -382,15 +362,6 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	doLog("\nAPI:")
 	time.Sleep(sleepDuration)
 
-	body, err := driver.PageSource()
-
-	strbody := body.Source
-
-	strbody = strings.SplitAfter(strbody, "<body>")[1]
-	strbody = strings.SplitAfter(strbody, ">")[1]
-	strbody = strings.SplitAfter(strbody, "</body>")[0]
-	strbody = strings.Split(strbody, "</")[0]
-
 	type EventJSON struct {
 		ID int `json:"id"`
 		Title string `json:"title"`
@@ -404,18 +375,46 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		Events []EventJSON `json:"events"`
 	}
 
-	// fmt.Println(strbody)
+	body, err := driver.PageSource()
+
+	strbody := body.Source
+
+	strbody = strings.SplitAfter(strbody, "<body>")[1]
+	strbody = strings.SplitAfter(strbody, ">")[1]
+	strbody = strings.SplitAfter(strbody, "</body>")[0]
+	strbody = strings.Split(strbody, "</")[0]
 
 	bodyBytes := []byte(strbody)
 	var r = new(APIResponse)
-	json.Unmarshal(bodyBytes, &r)
+	apiErr := json.Unmarshal(bodyBytes, &r)
 
-	for _, event := range r.Events {
-		fmt.Printf("%+v\n", event)
+	if apiErr != nil {
+		logTestResult(false, apiErr, "API without search returns valid JSON")
+	} else {
+		logTestResult(true, nil, "API without search returns valid JSON")
 	}
 
+	_, err = driver.Go(testURL + "/api/events?search=" + apiTestData.title)
+	time.Sleep(sleepDuration)
+
+	body, err = driver.PageSource()
+
+	strbody = body.Source
+
+	strbody = strings.SplitAfter(strbody, "<body>")[1]
+	strbody = strings.SplitAfter(strbody, ">")[1]
+	strbody = strings.SplitAfter(strbody, "</body>")[0]
+	strbody = strings.Split(strbody, "</")[0]
+
+	bodyBytes = []byte(strbody)
+	var a = new(APIResponse)
+	apiErr = json.Unmarshal(bodyBytes, &a)
+
+	result = (len(a.Events) == 1)
+	logTestResult(result, apiErr, "API with search returns relevant events")
 
 	// OLD CODE
+
 	// welcomeCount := countCSSSelector(selectors.Welcome)
 	// logTestResult(welcomeCount == 0, nil, "should not be welcoming anybody b/c nobody is logged in!")
 	//

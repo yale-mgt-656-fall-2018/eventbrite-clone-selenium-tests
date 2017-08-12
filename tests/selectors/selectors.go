@@ -53,7 +53,4 @@ const (
 	EventAttendees  = "ul[id=\"attendees\"] li[class=\"list-group-item\"]"
 	RsvpEmail       = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
 	RsvpEmailSubmit = "form button[type=\"submit\"]"
-
-	// API
-	APIBody = "body"
 )
