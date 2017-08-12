@@ -109,7 +109,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	result = cssSelectorExists(selectors.EventList)
 	logTestResult(result, nil, "shows a list of events")
 
-	// need to test event details
+	linkResult := cssSelectorExists(selectors.EventDetailLink)
+	timeResult := cssSelectorExists(selectors.EventTime)
+	logTestResult(linkResult && timeResult, nil, "individual events link to details and show time")
 
 	result = cssSelectorExists(selectors.NewEventLink)
 	logTestResult(result, nil, "has a link to the new event page")
@@ -195,6 +197,8 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		logTestResult(minuteResult && minuteLabelResult && minuteOptionResult == 2, nil, "has a labeled minute field with correct options")
 
 		// submit a bunch of bad form data
+
+		// how to check for correct options, not just count?
 
 	}
 

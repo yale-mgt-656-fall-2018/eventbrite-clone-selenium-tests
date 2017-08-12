@@ -10,12 +10,11 @@ const (
 	Errors          = "ul[class=\"form-errors\"]"
 
 	// home
-	TeamLogo  = "img[id=\"logo\"][src*=\".png\"]"
-	EventList = "ul"
-	Event     = "ul li.event"
-	EventTime = "li.event time[datetime]"
-	// EventTitle   = "li.event.h1" // how to specify title?
-	NewEventLink = "[id=\"new\"]"
+	TeamLogo        = "img[id=\"logo\"][src*=\".png\"]"
+	EventList       = "ul"
+	EventTime       = "li[class=\"event\"][id*=\"event-\"] time[datetime*=\" \"]"
+	EventDetailLink = "li[class=\"event\"][id*=\"event-\"] a[href*=\"/events/\"]" // how to specify title?
+	NewEventLink    = "[id=\"new\"]"
 
 	// about
 	Names     = "span[id*=\"name\"]"    // how to get nickname programatically?

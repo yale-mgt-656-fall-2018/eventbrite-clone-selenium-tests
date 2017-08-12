@@ -6,35 +6,6 @@
     page yet and `/` has Bootstrap included, the Bootstrap test will pass.
     If one of the six pages exists and does not include Bootstrap, the test
     will not pass.
-* As any user, I can visit the url at `/` and see your homepage, it has
-  * A an unordered list of events, including their details
-    * <span class="note">Grading Note:</span> each event is in an `li`
-      element with `class="event"` and `id="event-{id}"`,
-      where `{id}` indicates the numerical id of the event. E.g. your
-      event list may look something like the following:
-      ```markup
-        <ul>
-          <li class="event" id="event-1">...</li>
-          <li class="event" id="event-2">...</li>
-        </ul>
-      ```
-    * Each list element displays pertinent information about the event:
-      title, date, and how many people are RSVPd etc. It should include
-      the default events that come with the project. E.g. in the above
-      example those details should be where you see "...".
-    * Every event `li` element should have an HTML5 `time` tag that has a `datetime`
-      attribute equal to the time in [ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601).
-      The text of the tag should be the datetime in natural language, including the time.
-      For example, it may look like
-      ```markup
-        <time datetime="2014-11-12 09:30:0.0+07:00">
-          Wednesday, Nov 12 at 9:30AM
-        </time>
-      ```
-* The title for each event is a clickable link to the "detail page"
-  for that event, which should be at `/events/{{id}}`, where `id`
-  refers to the id of the event, e.g. `/events/0` would take me to the
-  event with id zero.
 * Events that are over are not shown
 * As a user, I can visit your API at `/api/events` and retrieve an object
   with key events containing all events in
@@ -60,17 +31,6 @@
 ```
   * I can search for events by submitting a GET request to a URL like `/api/events?search=beach` and only receive back events that have ‘beach’ in the event title.
 * As a user I can visit your page for creating new events at `/events/new`
-  * It should have a `form` for creating events. The form should have attribute `method="POST"`.
-  * I must specify the following attributes of an event: title, location, image, year, month, day, hour, and minute.
-    * There must be a form element with `name={{field}}` for each of these, where "{{field}}" is title, location, etc.
-    * Every form element requires a `label` element with appropriate `for` attribute. For example:
-      ```markup
-        <form method="POST">
-          <label for="title">Put title here:</label>
-          <input type="text" name="title" id="title">
-          ...
-        </form>
-      ```
     * The minute should only have 0, and 30 as selections. (At the hour and half hour).
     * The hour select should be in 24-hour time format: 0-23 are selectable.
     * The month select should have integer value attributes, numbered 0-11, and refer to months by their names: January, February, etc.
