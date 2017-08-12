@@ -2,15 +2,15 @@ package selectors
 
 const (
 	// Every page ...
-	Header          = "head"
+	Header          = "header"
 	BootstrapHref   = "head link[rel=\"stylesheet\"][href*=\"bootstrap\"]"
 	Footer          = "footer"
 	FooterHomeLink  = "footer a[href=\"/\"]"
 	FooterAboutLink = "footer a[href=\"/about\"]"
-	Errors          = "ul li.form-errors"
+	Errors          = "ul[class=\"form-errors\"]"
 
 	// home
-	TeamLogo  = "img[id=\"logo\"]"
+	TeamLogo  = "img[id=\"logo\"][src*=\".png\"]"
 	EventList = "ul"
 	Event     = "ul li.event"
 	EventTime = "li.event time[datetime]"
@@ -18,7 +18,7 @@ const (
 	NewEventLink = "[id=\"new\"]"
 
 	// about
-	Names     = "span[id*=\"name\"]"    // how to get nickname??
+	Names     = "span[id*=\"name\"]"    // how to get nickname programatically?
 	Headshots = "img[id*=\"headshot\"]" // ditto
 
 	// new event
@@ -52,6 +52,6 @@ const (
 	EventLocation   = "span[id=\"location\"]"
 	EventImage      = "[id=\"image\"]"
 	EventAttendees  = "ul[id=\"attendees\"] li[class=\"list-group-item\"]"
-	RsvpEmail       = "form input[id=\"email\"]"
+	RsvpEmail       = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
 	RsvpEmailSubmit = "form button[type=\"submit\"]"
 )
