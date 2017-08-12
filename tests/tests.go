@@ -199,6 +199,16 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		minuteOptionResult := countCSSSelector(selectors.NewEventMinuteOption)
 		logTestResult(minuteResult && minuteLabelResult && minuteOptionResult == 2, nil, "has a labeled minute field with correct options")
 
+		badEvents := getBadEvents()
+		for _, event := range badEvents {
+			msg := "should not allow event with " + event.flaw
+			err2 := fillEventForm(driver, testURL + "/events/new", event)
+			time.Sleep(sleepDuration)
+			if err2 == nil {
+				result = cssSelectorExists(selectors.Errors)
+			}
+			logTestResult(result, err2, msg)
+		}
 		// submit bad form data
 		// and good form data? could submit something known for API call
 		// how to check for correct options, not just count?
