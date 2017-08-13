@@ -555,6 +555,8 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	// el.Click()
 	// time.Sleep(sleepDuration)
 	// logTestResult(numTasks == 1 && countCSSSelector(selectors.Task) == 0, err, "should see none after deleting two tasks")
+	fmt.Printf("\n✅  Passed: %d", numPassed)
+	fmt.Printf("\n❌  Failed: %d\n\n", numFailed)
 
 	return numPassed, numFailed, err
 }
