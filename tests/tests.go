@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 	"time"
-	// "encoding/json"
-	// "strings"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
 
 	goselenium "github.com/bunsenapp/go-selenium"
 	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
@@ -358,16 +359,16 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	// how to check for correct options, not just count?
 
-	_, err = driver.Go(testURL + "/api/events")
+	// _, err = driver.Go(testURL + "/api/events")
 	doLog("\nAPI:")
-	time.Sleep(sleepDuration)
+	// time.Sleep(sleepDuration)
 
 	type EventJSON struct {
-		ID int `json:"id"`
-		Title string `json:"title"`
-		Date string `json:"date"`
-		Image string `json:"image"`
-		Location string `json:"location"`
+		ID        int      `json:"id"`
+		Title     string   `json:"title"`
+		Date      string   `json:"date"`
+		Image     string   `json:"image"`
+		Location  string   `json:"location"`
 		Attending []string `json:"attending"`
 	}
 
@@ -375,46 +376,45 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		Events []EventJSON `json:"events"`
 	}
 
-	// need a better way to parse API responses
+	client := http.Client{
+		Timeout: time.Second * 5,
+	}
 
-	// body, err := driver.PageSource()
-	//
-	// strbody := body.Source
-	//
-	// strbody = strings.SplitAfter(strbody, "<body>")[1]
-	// strbody = strings.SplitAfter(strbody, ">")[1]
-	// strbody = strings.SplitAfter(strbody, "</body>")[0]
-	// strbody = strings.Split(strbody, "</")[0]
-	//
-	// bodyBytes := []byte(strbody)
-	// var r = new(APIResponse)
-	// apiErr := json.Unmarshal(bodyBytes, &r)
-	//
-	// if apiErr != nil {
-	// 	logTestResult(false, apiErr, "API without search returns valid JSON")
-	// } else {
-	// 	logTestResult(true, nil, "API without search returns valid JSON")
-	// }
-	//
-	// _, err = driver.Go(testURL + "/api/events?search=" + apiTestData.title)
-	// time.Sleep(sleepDuration)
-	//
-	// body, err = driver.PageSource()
-	//
-	// strbody = body.Source
-	//
-	// strbody = strings.SplitAfter(strbody, "<body>")[1]
-	// strbody = strings.SplitAfter(strbody, ">")[1]
-	// strbody = strings.SplitAfter(strbody, "</body>")[0]
-	// strbody = strings.Split(strbody, "</")[0]
-	//
-	// bodyBytes = []byte(strbody)
-	// var a = new(APIResponse)
-	// apiErr = json.Unmarshal(bodyBytes, &a)
-	//
-	// result = (len(a.Events) == 1)
-	// logTestResult(result, apiErr, "API with search returns relevant events")
+	success := true
 
+	req, reqErr := http.NewRequest(http.MethodGet, testURL+"/api/events", nil)
+	if reqErr != nil {
+		success = false
+	}
+
+	res, resErr := client.Do(req)
+	if resErr != nil {
+		success = false
+	}
+
+	body, readErr := ioutil.ReadAll(res.Body)
+	if readErr != nil {
+		success = false
+	}
+
+	allResponse := APIResponse{}
+	jsonErr := json.Unmarshal(body, &allResponse)
+	if jsonErr != nil {
+		success = false
+	}
+
+	logTestResult(success, nil, "should return valid JSON")
+
+	req, reqErr = http.NewRequest(http.MethodGet, testURL + "/api/events?search=" + apiTestData.title, nil)
+
+	res, resErr = client.Do(req)
+
+	body, readErr = ioutil.ReadAll(res.Body)
+
+	searchResponse := APIResponse{}
+	jsonErr = json.Unmarshal(body, &searchResponse)
+
+	logTestResult((len(searchResponse.Events) == 1), nil, "should be searchable")
 
 	fmt.Printf("\n✅  Passed: %d", numPassed)
 	fmt.Printf("\n❌  Failed: %d\n\n", numFailed)
