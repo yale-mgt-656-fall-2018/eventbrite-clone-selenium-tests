@@ -10,7 +10,7 @@ const (
 	Errors          = "ul[class=\"form-errors\"]"
 
 	// home
-	TeamLogo        = "img[id=\"logo\"][src$=\".png\"]"
+	TeamLogo        = "* img[id=\"logo\"]"
 	EventList       = "ul li[class=\"event\"]"
 	EventTime       = "li[class=\"event\"][id^=\"event-\"] time[datetime]"
 	EventDetailLink = "li[class=\"event\"][id^=\"event-\"] a[href*=\"/events/\"]" // how to specify title?
