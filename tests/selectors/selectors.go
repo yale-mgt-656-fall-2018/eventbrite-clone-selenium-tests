@@ -11,7 +11,7 @@ const (
 
 	// home
 	TeamLogo        = "* img[id=\"logo\"]"
-	EventList       = "ul li[class=\"event\"]"
+	EventList       = "ul li[class=\"event\"][id^=\"event-\"]"
 	EventTime       = "li[class=\"event\"][id^=\"event-\"] time[datetime]"
 	EventDetailLink = "li[class=\"event\"][id^=\"event-\"] a[href*=\"/events/\"]" // how to specify title?
 	NewEventLink    = "[id=\"new\"]"
@@ -49,8 +49,8 @@ const (
 	EventTitle      = "h1[id=\"title\"]"
 	EventDate       = "span[id=\"date\"]"
 	EventLocation   = "span[id=\"location\"]"
-	EventImage      = "[id=\"image\"]"
-	EventAttendees  = "ul[id=\"attendees\"] li[class=\"list-group-item\"]"
+	EventImage      = "img[id=\"image\"]"
+	EventAttendees  = "ul['id=\"attendees\"'] li[class=\"list-group-item\"]"
 	RsvpEmail       = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
 	RsvpEmailSubmit = "form button[type=\"submit\"]"
 )

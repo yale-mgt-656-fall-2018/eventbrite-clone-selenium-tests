@@ -74,7 +74,6 @@ func getBadEvents() []Event {
 	e.title = randomString(51)
 	events = append(events, e)
 
-	// example app doesn't pass this case, do we care?
 	e = randomEvent()
 	e.flaw = "no image"
 	e.image = ""

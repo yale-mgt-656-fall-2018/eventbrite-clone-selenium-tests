@@ -273,11 +273,13 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	goodRsvps = getGoodRsvps()
 	for _, rsvp := range goodRsvps {
 		originalRsvps := countCSSSelector(selectors.EventAttendees)
+		doLog(originalRsvps)
 		msg := "should allow RSVP with " + rsvp.flaw
 		err2 := fillRSVPForm(driver, testURL+"/events/2", rsvp)
 		time.Sleep(sleepDuration)
 		if err2 == nil {
 			newRsvps := countCSSSelector(selectors.EventAttendees)
+			doLog(newRsvps)
 			result = (newRsvps == originalRsvps+1)
 		}
 		logTestResult(result, err2, msg)
