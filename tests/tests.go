@@ -1,12 +1,12 @@
 package tests
 
 import (
-	"fmt"
-	"log"
-	"time"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"time"
 
 	goselenium "github.com/bunsenapp/go-selenium"
 	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
@@ -75,11 +75,66 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		count := countCSSSelector(sel)
 		return (count != 0)
 	}
+	checkGoodRsvps := func(eventNum int) int {
+		goodRsvps := getGoodRsvps()
+		for _, rsvp := range goodRsvps {
+			numOriginalRsvps := countCSSSelector(selectors.EventAttendees)
+			msg := "should allow RSVP with " + rsvp.attribute
+			err2 := fillRSVPForm(driver, testURL+"/events/"+fmt.Sprint(eventNum), rsvp)
+			time.Sleep(sleepDuration)
+			numNewRsvps := countCSSSelector(selectors.EventAttendees)
+			result := (numNewRsvps == (numOriginalRsvps+1))
+			logTestResult(result, err2, msg)
+		}
+		return 1
+	}
+	checkBadRsvps := func(eventNum int) int {
+		badRsvps := getBadRsvps()
+		for _, rsvp := range badRsvps {
+			msg := "should not allow RSVP with " + rsvp.flaw
+			err2 := fillRSVPForm(driver, testURL+"/events/0", rsvp)
+			time.Sleep(sleepDuration)
+			result := cssSelectorExists(selectors.Errors)
+			logTestResult(result, err2, msg)
+		}
+		return 1
+	}
+	checkEvent := func(eventNum int) int {
+		driver.Go(testURL + "/events/" + fmt.Sprint(eventNum))
+
+		doLog("\nEvent " + fmt.Sprint(eventNum) + ":")
+		time.Sleep(sleepDuration)
+
+		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
+		headerResult := cssSelectorExists(selectors.Header)
+		footerResult := cssSelectorExists(selectors.Footer)
+		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
+		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
+
+		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
+
+		result := cssSelectorExists(selectors.EventTitle)
+		logTestResult(result, nil, "has a title")
+		result = cssSelectorExists(selectors.EventDate)
+		logTestResult(result, nil, "has a date")
+		result = cssSelectorExists(selectors.EventLocation)
+		logTestResult(result, nil, "has a location")
+		result = cssSelectorExists(selectors.EventImage)
+		logTestResult(result, nil, "has an image")
+		result = cssSelectorExists(selectors.EventAttendees)
+		logTestResult(result, nil, "has a list of attendees")
+
+		result = cssSelectorExists(selectors.RsvpEmail)
+		logTestResult(result, nil, "has a form to RSVP")
+
+		checkBadRsvps(eventNum)
+
+		checkGoodRsvps(eventNum)
+
+		return 1
+	}
 
 	_, err := driver.Go(testURL)
-
-	hi := randomEvent()
-	hi.createFormData()
 
 	time.Sleep(sleepDuration)
 
@@ -130,160 +185,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	result = cssSelectorExists(selectors.Headshots)
 	logTestResult(result, nil, "shows your headshots")
 
-	_, err = driver.Go(testURL + "/events/0")
-
-	doLog("\nEvent 0:")
-	time.Sleep(sleepDuration)
-
-	bootstrapResult = cssSelectorExists(selectors.BootstrapHref)
-	headerResult = cssSelectorExists(selectors.Header)
-	footerResult = cssSelectorExists(selectors.Footer)
-	footerHomeLinkResult = cssSelectorExists(selectors.FooterHomeLink)
-	footerAboutLinkResult = cssSelectorExists(selectors.FooterAboutLink)
-
-	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
-
-	result = cssSelectorExists(selectors.EventTitle)
-	logTestResult(result, nil, "has a title")
-	result = cssSelectorExists(selectors.EventDate)
-	logTestResult(result, nil, "has a date")
-	result = cssSelectorExists(selectors.EventLocation)
-	logTestResult(result, nil, "has a location")
-	result = cssSelectorExists(selectors.EventImage)
-	logTestResult(result, nil, "has an image")
-	result = cssSelectorExists(selectors.EventAttendees)
-	logTestResult(result, nil, "has a list of attendees")
-
-	result = cssSelectorExists(selectors.RsvpEmail)
-	logTestResult(result, nil, "has a form to RSVP")
-
-	badRsvps := getBadRsvps()
-	for _, rsvp := range badRsvps {
-		msg := "should not allow RSVP with " + rsvp.flaw
-		err2 := fillRSVPForm(driver, testURL+"/events/0", rsvp)
-		time.Sleep(sleepDuration)
-		if err2 == nil {
-			result = cssSelectorExists(selectors.Errors)
-		}
-		logTestResult(result, err2, msg)
-	}
-
-	goodRsvps := getGoodRsvps()
-	for _, rsvp := range goodRsvps {
-		originalRsvps := countCSSSelector(selectors.EventAttendees)
-		msg := "should allow RSVP with " + rsvp.flaw
-		err2 := fillRSVPForm(driver, testURL+"/events/0", rsvp)
-		time.Sleep(sleepDuration)
-		if err2 == nil {
-			newRsvps := countCSSSelector(selectors.EventAttendees)
-			result = (newRsvps == originalRsvps+1)
-		}
-		logTestResult(result, err2, msg)
-	}
-
-	_, err = driver.Go(testURL + "/events/1")
-
-	doLog("\nEvent 1:")
-	time.Sleep(sleepDuration)
-
-	bootstrapResult = cssSelectorExists(selectors.BootstrapHref)
-	headerResult = cssSelectorExists(selectors.Header)
-	footerResult = cssSelectorExists(selectors.Footer)
-	footerHomeLinkResult = cssSelectorExists(selectors.FooterHomeLink)
-	footerAboutLinkResult = cssSelectorExists(selectors.FooterAboutLink)
-
-	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
-
-	result = cssSelectorExists(selectors.EventTitle)
-	logTestResult(result, nil, "has a title")
-	result = cssSelectorExists(selectors.EventDate)
-	logTestResult(result, nil, "has a date")
-	result = cssSelectorExists(selectors.EventLocation)
-	logTestResult(result, nil, "has a location")
-	result = cssSelectorExists(selectors.EventImage)
-	logTestResult(result, nil, "has an image")
-	result = cssSelectorExists(selectors.EventAttendees)
-	logTestResult(result, nil, "has a list of attendees")
-
-	result = cssSelectorExists(selectors.RsvpEmail)
-	logTestResult(result, nil, "has a form to RSVP")
-
-	badRsvps = getBadRsvps()
-	for _, rsvp := range badRsvps {
-		msg := "should not allow RSVP with " + rsvp.flaw
-		err2 := fillRSVPForm(driver, testURL+"/events/1", rsvp)
-		time.Sleep(sleepDuration)
-		if err2 == nil {
-			result = cssSelectorExists(selectors.Errors)
-		}
-		logTestResult(result, err2, msg)
-	}
-
-	goodRsvps = getGoodRsvps()
-	for _, rsvp := range goodRsvps {
-		originalRsvps := countCSSSelector(selectors.EventAttendees)
-		msg := "should allow RSVP with " + rsvp.flaw
-		err2 := fillRSVPForm(driver, testURL+"/events/1", rsvp)
-		time.Sleep(sleepDuration)
-		if err2 == nil {
-			newRsvps := countCSSSelector(selectors.EventAttendees)
-			result = (newRsvps == originalRsvps+1)
-		}
-		logTestResult(result, err2, msg)
-	}
-
-	_, err = driver.Go(testURL + "/events/2")
-
-	doLog("\nEvent 2:")
-	time.Sleep(sleepDuration)
-
-	bootstrapResult = cssSelectorExists(selectors.BootstrapHref)
-	headerResult = cssSelectorExists(selectors.Header)
-	footerResult = cssSelectorExists(selectors.Footer)
-	footerHomeLinkResult = cssSelectorExists(selectors.FooterHomeLink)
-	footerAboutLinkResult = cssSelectorExists(selectors.FooterAboutLink)
-
-	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
-
-	result = cssSelectorExists(selectors.EventTitle)
-	logTestResult(result, nil, "has a title")
-	result = cssSelectorExists(selectors.EventDate)
-	logTestResult(result, nil, "has a date")
-	result = cssSelectorExists(selectors.EventLocation)
-	logTestResult(result, nil, "has a location")
-	result = cssSelectorExists(selectors.EventImage)
-	logTestResult(result, nil, "has an image")
-	result = cssSelectorExists(selectors.EventAttendees)
-	logTestResult(result, nil, "has a list of attendees")
-
-	result = cssSelectorExists(selectors.RsvpEmail)
-	logTestResult(result, nil, "has a form to RSVP")
-
-	badRsvps = getBadRsvps()
-	for _, rsvp := range badRsvps {
-		msg := "should not allow RSVP with " + rsvp.flaw
-		err2 := fillRSVPForm(driver, testURL+"/events/2", rsvp)
-		time.Sleep(sleepDuration)
-		if err2 == nil {
-			result = cssSelectorExists(selectors.Errors)
-		}
-		logTestResult(result, err2, msg)
-	}
-
-	goodRsvps = getGoodRsvps()
-	for _, rsvp := range goodRsvps {
-		originalRsvps := countCSSSelector(selectors.EventAttendees)
-		doLog(originalRsvps)
-		msg := "should allow RSVP with " + rsvp.flaw
-		err2 := fillRSVPForm(driver, testURL+"/events/2", rsvp)
-		time.Sleep(sleepDuration)
-		if err2 == nil {
-			newRsvps := countCSSSelector(selectors.EventAttendees)
-			doLog(newRsvps)
-			result = (newRsvps == originalRsvps+1)
-		}
-		logTestResult(result, err2, msg)
-	}
+	checkEvent(0)
+	checkEvent(1)
+	checkEvent(2)
 
 	_, err = driver.Go(testURL + "/events/new")
 
@@ -407,7 +311,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	logTestResult(success, nil, "should return valid JSON")
 
-	req, reqErr = http.NewRequest(http.MethodGet, testURL + "/api/events?search=" + apiTestData.title, nil)
+	req, reqErr = http.NewRequest(http.MethodGet, testURL+"/api/events?search="+apiTestData.title, nil)
 
 	res, resErr = client.Do(req)
 

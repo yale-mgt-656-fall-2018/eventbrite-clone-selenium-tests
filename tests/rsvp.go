@@ -10,6 +10,7 @@ import (
 type RSVP struct {
 	email string
 	flaw  string
+	attribute string
 }
 
 func randomEmail(yaleEmail bool, scramble bool) RSVP {
@@ -110,15 +111,15 @@ func getGoodRsvps() []RSVP {
 	var rsvps []RSVP
 
 	r = randomEmail(true, false)
-	r.flaw = "normal yale email"
+	r.attribute = "normal yale email"
 	rsvps = append(rsvps, r)
 
 	r = randomEmail(true, true)
-	r.flaw = "scrambled yale email"
+	r.attribute = "scrambled yale email"
 	rsvps = append(rsvps, r)
 
 	r = randomEmail(true, true)
-	r.flaw = "another scrambled yale email"
+	r.attribute = "another scrambled yale email"
 	rsvps = append(rsvps, r)
 
 	return rsvps
