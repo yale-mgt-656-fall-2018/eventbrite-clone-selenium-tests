@@ -79,10 +79,12 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		goodRsvps := getGoodRsvps()
 		for _, rsvp := range goodRsvps {
 			numOriginalRsvps := countCSSSelector(selectors.EventAttendees)
+			doLog("original RSVPs: " + fmt.Sprint(numOriginalRsvps))
 			msg := "should allow RSVP with " + rsvp.attribute
 			err2 := fillRSVPForm(driver, testURL+"/events/"+fmt.Sprint(eventNum), rsvp)
 			time.Sleep(sleepDuration)
 			numNewRsvps := countCSSSelector(selectors.EventAttendees)
+			doLog("new RSVPs: " + fmt.Sprint(numNewRsvps))
 			result := (numNewRsvps == (numOriginalRsvps+1))
 			logTestResult(result, err2, msg)
 		}
@@ -92,7 +94,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		badRsvps := getBadRsvps()
 		for _, rsvp := range badRsvps {
 			msg := "should not allow RSVP with " + rsvp.flaw
-			err2 := fillRSVPForm(driver, testURL+"/events/0", rsvp)
+			err2 := fillRSVPForm(driver, testURL+"/events/" + fmt.Sprint(eventNum), rsvp)
 			time.Sleep(sleepDuration)
 			result := cssSelectorExists(selectors.Errors)
 			logTestResult(result, err2, msg)
