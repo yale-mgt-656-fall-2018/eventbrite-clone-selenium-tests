@@ -3,8 +3,7 @@ Here's what we're testing your app for:
 * Every page should look good. That means including the Bootstrap CSS stylesheet in the `head` of the page -- we'll be looking for a link with an `href` that contains `bootstrap`.
 * Every page should have a header.
 * Every page should have a footer with links to the home page and about page.
-
-`Grading note: we'll test each of these individually for the home page, then test them as a group for subsequent pages -- if any one of them fails, all of them will. Also, we're defining 'every page' as /, /about, /events/new, /events/0, /events/1, and /events/2.`
+* Grading note: we'll test each of these individually for the home page, then test them as a group for subsequent pages -- if any one of them fails, all of them will. Also, we're defining 'every page' as /, /about, /events/new, /events/0, /events/1, and /events/2.
 
 * The home page should have your logo -- we'll look for an `img` tag with the id `logo`.
 * The home page should also have a link to the new event page with the id `new`.
@@ -45,4 +44,4 @@ Here's what we're testing your app for:
     * Grading note: the JSON reader that we're using for the tests is pretty finicky, so make sure that your API responses are structured exactly like this.
 * If a `search` parameter is attached to the API request (something like `/api/events?search=hello`), you should only return events with the search term in the title.
 
-All of our tests are public and available to you -- they're written in Go, which isn't too hard to understand if you're feeling okay about JavaScript, and we'd be happy to walk you through them in office hours if you're confused.
+Note that while this document is our best effort at translating the tests into plain English, the grading code is the final source of truth. It's available to you to look through if you'd like (it's written in Go, which shouldn't be too hard to understand if you're feeling okay about JavaScript), and at the end of the day, you'll be based on how many of the tests you're passing in the grading code, rather than their descriptions here. We're happy to walk you through the grading code in office hours if you're confused!
