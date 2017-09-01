@@ -4,7 +4,7 @@ All pages:
 * Every page should look good. That means including the Bootstrap CSS stylesheet in the `head` of the page -- we'll be looking for a link with an `href` that contains `bootstrap`.
 * Every page should have a `header`.
 * Every page should have a `footer` with links to the home page and about page.
-* Grading note: we'll test each of these individually for the home page, then test them as a group for subsequent pages -- if any one of them fails, all of them will. Also, we're defining 'every page' as `/`, `/about`, `/events/new`, `/events/0`, `/events/1`, and `/events/2`.
+* Grading note: we're defining 'every page' as `/`, `/about`, `/events/new`, `/events/0`, `/events/1`, and `/events/2`.
 
 Home page:
 * The home page should have your logo -- we'll look for an `img` tag with the id `logo`.
