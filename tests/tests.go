@@ -178,6 +178,10 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	result = cssSelectorExists(selectors.NewEventLink)
 	logTestResult(result, nil, "has a link to the new event page")
 
+	// doLog("\nMobile responsiveness:")
+	// result = cssSelectorExists(selectors.DesktopResponse)
+	// doLog(result)
+
 	_, err = driver.Go(testURL + "/about")
 	if err != nil {
 		return 0, 0, err
@@ -351,6 +355,11 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	}
 
 	logTestResult((len(searchResponse.Events) == 1), nil, "should be searchable")
+	// elements, err := driver.FindElements(goselenium.ByCSSSelector(selectors.MobileResponse))
+	// if( elements[0].isDisplayed()){
+	// 	doLog("woot")
+	// }
+
 
 	fmt.Printf("\n✅  Passed: %d", numPassed)
 	fmt.Printf("\n❌  Failed: %d\n\n", numFailed)

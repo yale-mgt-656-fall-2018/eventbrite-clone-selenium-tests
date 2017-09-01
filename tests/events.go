@@ -51,7 +51,7 @@ func createFormDataAPITest() Event {
 	e := Event{
 		title:    randomString(45),
 		location: "New Haven, CT",
-		image:    "https://yale.edu/bfa.png",
+		image:    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Branford_Court_spring_2.JPG/250px-Branford_Court_spring_2.JPG",
 		year:     "2017",
 		month:    "7",
 		day:      "4",
