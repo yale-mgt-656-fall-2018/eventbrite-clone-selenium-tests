@@ -8,8 +8,8 @@ import (
 )
 
 type RSVP struct {
-	email string
-	flaw  string
+	email     string
+	flaw      string
 	attribute string
 }
 

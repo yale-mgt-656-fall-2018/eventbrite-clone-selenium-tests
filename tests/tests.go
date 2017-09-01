@@ -12,6 +12,8 @@ import (
 	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
 )
 
+// RunForURL - runs the test given a target URL
+//
 func RunForURL(seleniumURL string, testURL string, failFast bool, sleepDuration time.Duration) (int, int, error) {
 	// Create capabilities, driver etc.
 	capabilities := goselenium.Capabilities{}
@@ -83,7 +85,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			err2 := fillRSVPForm(driver, testURL+"/events/"+fmt.Sprint(eventNum), rsvp)
 			time.Sleep(sleepDuration)
 			numNewRsvps := countCSSSelector(selectors.EventAttendees)
-			result := (numNewRsvps == (numOriginalRsvps+1))
+			result := (numNewRsvps == (numOriginalRsvps + 1))
 			logTestResult(result, err2, msg)
 		}
 		return 1
@@ -92,7 +94,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		badRsvps := getBadRsvps()
 		for _, rsvp := range badRsvps {
 			msg := "should not allow RSVP with " + rsvp.flaw
-			err2 := fillRSVPForm(driver, testURL+"/events/" + fmt.Sprint(eventNum), rsvp)
+			err2 := fillRSVPForm(driver, testURL+"/events/"+fmt.Sprint(eventNum), rsvp)
 			time.Sleep(sleepDuration)
 			result := cssSelectorExists(selectors.Errors)
 			logTestResult(result, err2, msg)
@@ -135,6 +137,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	}
 
 	_, err := driver.Go(testURL)
+	if err != nil {
+		return 0, 0, err
+	}
 
 	time.Sleep(sleepDuration)
 
@@ -167,6 +172,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	logTestResult(result, nil, "has a link to the new event page")
 
 	_, err = driver.Go(testURL + "/about")
+	if err != nil {
+		return 0, 0, err
+	}
 
 	doLog("\nAbout page:")
 	time.Sleep(sleepDuration)
@@ -190,6 +198,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	checkEvent(2)
 
 	_, err = driver.Go(testURL + "/events/new")
+	if err != nil {
+		return 0, 0, err
+	}
 
 	doLog("\nNew event page:")
 	time.Sleep(sleepDuration)
@@ -312,13 +323,25 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	logTestResult(success, nil, "should return valid JSON")
 
 	req, reqErr = http.NewRequest(http.MethodGet, testURL+"/api/events?search="+apiTestData.title, nil)
+	if reqErr != nil {
+		return 0, 0, err
+	}
 
 	res, resErr = client.Do(req)
+	if resErr != nil {
+		return 0, 0, err
+	}
 
 	body, readErr = ioutil.ReadAll(res.Body)
+	if readErr != nil {
+		return 0, 0, err
+	}
 
 	searchResponse := APIResponse{}
 	jsonErr = json.Unmarshal(body, &searchResponse)
+	if jsonErr != nil {
+		return 0, 0, err
+	}
 
 	logTestResult((len(searchResponse.Events) == 1), nil, "should be searchable")
 

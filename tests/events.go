@@ -1,9 +1,10 @@
 package tests
 
 import (
+	"strconv"
+
 	randomdata "github.com/Pallinder/go-randomdata"
 	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
-	"strconv"
 )
 
 type Event struct {
