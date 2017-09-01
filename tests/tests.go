@@ -39,6 +39,11 @@ func RunForURL(seleniumURL string, testURL string, failFast bool, sleepDuration 
 	return Run(driver, testURL, true, failFast, sleepDuration)
 }
 
+type existanceTest struct {
+	selector    string
+	description string
+}
+
 // Run - run all tests
 //
 func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast bool, sleepDuration time.Duration) (int, int, error) {
@@ -101,33 +106,35 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		}
 		return 1
 	}
+
+	logExists := func(selector string, description string) bool {
+		result := cssSelectorExists(selector)
+		logTestResult(result, nil, description)
+		return result
+	}
+
 	checkEvent := func(eventNum int) int {
 		driver.Go(testURL + "/events/" + fmt.Sprint(eventNum))
 
 		doLog("\nEvent " + fmt.Sprint(eventNum) + ":")
 		time.Sleep(sleepDuration)
 
-		bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
-		headerResult := cssSelectorExists(selectors.Header)
-		footerResult := cssSelectorExists(selectors.Footer)
-		footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
-		footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
-
-		logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
-
-		result := cssSelectorExists(selectors.EventTitle)
-		logTestResult(result, nil, "has a title")
-		result = cssSelectorExists(selectors.EventDate)
-		logTestResult(result, nil, "has a date")
-		result = cssSelectorExists(selectors.EventLocation)
-		logTestResult(result, nil, "has a location")
-		result = cssSelectorExists(selectors.EventImage)
-		logTestResult(result, nil, "has an image")
-		result = cssSelectorExists(selectors.EventAttendees)
-		logTestResult(result, nil, "has a list of attendees")
-
-		result = cssSelectorExists(selectors.RsvpEmail)
-		logTestResult(result, nil, "has a form to RSVP")
+		existanceTests := []existanceTest{
+			{selectors.BootstrapHref, "uses bootstrap"},
+			{selectors.Header, "has a header"},
+			{selectors.Footer, "has a footer"},
+			{selectors.FooterAboutLink, "has a link to the about page in footer"},
+			{selectors.FooterHomeLink, "has a link to the home page in footer"},
+			{selectors.EventTitle, "has a title"},
+			{selectors.EventDate, "has a date"},
+			{selectors.EventLocation, "has a location"},
+			{selectors.EventImage, "has an image"},
+			{selectors.EventAttendees, "has a list of attendees"},
+			{selectors.RsvpEmail, "has a form to RSVP"},
+		}
+		for _, t := range existanceTests {
+			logExists(t.selector, t.description)
+		}
 
 		checkBadRsvps(eventNum)
 
