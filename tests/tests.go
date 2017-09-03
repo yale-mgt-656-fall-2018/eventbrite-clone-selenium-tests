@@ -251,7 +251,8 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	dayResult := cssSelectorExists(selectors.NewEventDay)
 	dayLabelResult := cssSelectorExists(selectors.NewEventDayLabel)
-	dayOptionResult := countCSSSelector(selectors.NewEventDayOption)
+	dayOptionResult := countCSS
+Selector(selectors.NewEventDayOption)
 	logTestResult(dayResult && dayLabelResult && dayOptionResult == 31, nil, "has a labeled day field with correct options")
 
 	hourResult := cssSelectorExists(selectors.NewEventHour)
@@ -359,7 +360,6 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	// if( elements[0].isDisplayed()){
 	// 	doLog("woot")
 	// }
-
 
 	fmt.Printf("\n✅  Passed: %d", numPassed)
 	fmt.Printf("\n❌  Failed: %d\n\n", numFailed)

@@ -15,7 +15,7 @@ const (
 	EventTime       = "li[class=\"event\"][id^=\"event-\"] time[datetime]"
 	EventDetailLink = "li[class=\"event\"][id^=\"event-\"] a[href*=\"/events/\"]" // how to specify title?
 	NewEventLink    = "[id=\"new\"]"
-	MobileResponse 	= "div[id=\"mobile\"] :visible"
+	MobileResponse  = "div[id=\"mobile\"] :visible"
 	DesktopResponse = "#response "
 
 	// about
