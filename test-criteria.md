@@ -9,7 +9,7 @@ All pages:
 Home page:
 * The home page should have your logo -- we'll look for an `img` tag with the id `logo`.
 * The home page should also have a link to the new event page with the id `new`.
-* Finally, the home page should have a list of events (a `ul` list, to be specific). Each event should have the class `event` and the id `event-x`, where `x` is the event's id number. Each event should also have a link to its detail page and a `time` tag with the `datetime` attribute set to *something, Jacob should fix this*.
+* Finally, the home page should have a list of events (a `ul` list, to be specific). Each event should have the class `event` and the id `event-x`, where `x` is the event's id number. Each event should also have a link to its detail page and a `time` tag with the event's date and time.
 
 About page:
 * The about page should have all team members' names in a `span` with the id `class-nickname-name`, where `class-nickname` is, well, your class nickname. Don't forget the dashes. Additionally, we'll look for a picture of each team member with the id `class-nickname-headshot`. (Note that this picture doesn't need to actually be of the member -- we're not using computer vision to make sure you have decent headshots or anything -- but you do need an image for each member.)

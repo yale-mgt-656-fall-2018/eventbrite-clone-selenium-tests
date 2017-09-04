@@ -251,8 +251,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	dayResult := cssSelectorExists(selectors.NewEventDay)
 	dayLabelResult := cssSelectorExists(selectors.NewEventDayLabel)
-	dayOptionResult := countCSS
-Selector(selectors.NewEventDayOption)
+	dayOptionResult := countCSSSelector(selectors.NewEventDayOption)
 	logTestResult(dayResult && dayLabelResult && dayOptionResult == 31, nil, "has a labeled day field with correct options")
 
 	hourResult := cssSelectorExists(selectors.NewEventHour)

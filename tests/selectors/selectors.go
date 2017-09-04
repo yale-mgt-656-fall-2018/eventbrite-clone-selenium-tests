@@ -12,7 +12,7 @@ const (
 	// home
 	TeamLogo        = "* img[id=\"logo\"]"
 	EventList       = "ul li[class=\"event\"][id^=\"event-\"]"
-	EventTime       = "li[class=\"event\"][id^=\"event-\"] time[datetime]"
+	EventTime       = "li[class=\"event\"][id^=\"event-\"] time"
 	EventDetailLink = "li[class=\"event\"][id^=\"event-\"] a[href*=\"/events/\"]" // how to specify title?
 	NewEventLink    = "[id=\"new\"]"
 	MobileResponse  = "div[id=\"mobile\"] :visible"
