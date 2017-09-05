@@ -12,7 +12,7 @@ Home page:
 * Finally, the home page should have a list of events (a `ul` list, to be specific). Each event should have the class `event` and the id `event-x`, where `x` is the event's id number. Each event's title should also link to its detail page with an `a` element with the `id` 'title', and the event's `li` should contain a `time` tag with the event's date and time.
 
 About page:
-* The about page should have all team members' names in a `span` with the id `class-nickname-name`, where `class-nickname` is, well, your class nickname. Don't forget the dashes. Additionally, we'll look for a picture of each team member with the id `class-nickname-headshot`. (Note that this picture doesn't need to actually be of the member -- we're not using computer vision to make sure you have decent headshots or anything -- but you do need an image for each member.)
+* The about page should have all team members' names in a `span` with the id `class-nickname-name`, where `class-nickname` is, well, your class nickname (check your profile on the course website if you're confused). Don't forget the dashes. Additionally, we'll look for a picture of each team member with the id `class-nickname-headshot`. (Note that this picture doesn't need to actually be of the member -- we're not using computer vision to make sure you have decent headshots or anything -- but you do need an image for each member.)
 
 New event page:
 * The new event page should have a form that POSTs its data. It needs to have inputs for `title`, `image`, `location`, `year`, `month`, `day`, `hour`, and `minute` as follows (make sure that you match these names exactly, otherwise the tests will fail):
@@ -34,21 +34,23 @@ Event detail pages:
 
 API:
 * You should have an API running at `/api/events` that returns a valid JSON of every event that your app knows about. It should look like this:
-    * ```{events:
-        [
-            {
-                id: 0,
-                title: 'Hello world',
-                location: 'New Haven',
-                attendees: [
-                    'jacob.bendicksen@yale.edu',
-                ],
-                image: 'http://yaleherald.com/wp-content/uploads/2013/02/Screen-Shot-2013-02-27-at-11.51.10-AM.png',
-                time: '9/19/17 23:30'
-            },
-            ...
-        ]
-    }```
+    * ```
+        {events:
+            [
+                {
+                    id: 0,
+                    title: 'Hello world',
+                    location: 'New Haven',
+                    attendees: [
+                        'jacob.bendicksen@yale.edu',
+                    ],
+                    image: 'http://yaleherald.com/wp-content/uploads/2013/02/Screen-Shot-2013-02-27-at-11.51.10-AM.png',
+                    time: '9/19/17 23:30'
+                },
+                ...
+            ]
+        }
+    ```
     * Grading note: the JSON reader that we're using for the tests is pretty finicky, so make sure that your API responses are structured exactly like this.
 * If a `search` parameter is attached to the API request (something like `/api/events?search=hello`), you should only return events with the search term in the title. If there aren't any, return a JSON that looks like:
     * `{events: []}`
