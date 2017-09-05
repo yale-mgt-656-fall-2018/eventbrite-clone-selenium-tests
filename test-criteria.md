@@ -47,7 +47,7 @@ API:
                 image: 'http://yaleherald.com/wp-content/uploads/2013/02/Screen-Shot-2013-02-27-at-11.51.10-AM.png',
                 time: '9/19/17 23:30'
             },
-            ...
+            <more events here, maybe>...
         ]
     }
 ```
