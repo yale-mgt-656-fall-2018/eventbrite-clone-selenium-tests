@@ -49,8 +49,7 @@ API:
                 },
                 ...
             ]
-        }
-    ```
+        }```
     * Grading note: the JSON reader that we're using for the tests is pretty finicky, so make sure that your API responses are structured exactly like this.
 * If a `search` parameter is attached to the API request (something like `/api/events?search=hello`), you should only return events with the search term in the title. If there aren't any, return a JSON that looks like:
     * `{events: []}`
