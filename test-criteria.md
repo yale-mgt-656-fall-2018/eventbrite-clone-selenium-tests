@@ -34,7 +34,8 @@ Event detail pages:
 
 API:
 * You should have an API running at `/api/events` that returns a valid JSON of every event that your app knows about. It should look like this:
-    * ``` {events:
+    * ```
+    {events:
             [
                 {
                     id: 0,
@@ -48,7 +49,9 @@ API:
                 },
                 ...
             ]
-        } ```
+        }
+    ```
+
     * Grading note: the JSON reader that we're using for the tests is pretty finicky, so make sure that your API responses are structured exactly like this.
 * If a `search` parameter is attached to the API request (something like `/api/events?search=hello`), you should only return events with the search term in the title. If there aren't any, return a JSON that looks like:
     * `{events: []}`
