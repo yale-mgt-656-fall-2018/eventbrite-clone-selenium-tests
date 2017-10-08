@@ -45,7 +45,7 @@ const (
 	NewEventMinute        = "form select[name=\"minute\"]"
 	NewEventMinuteLabel   = "form label[for=\"minute\"]"
 	NewEventMinuteOption  = "form select[name=\"minute\"] option"
-	NewEventSubmit        = "form input[name=\"submit\"][type=\"submit\"]"
+	NewEventSubmit        = "form button[name=\"submit\"][type=\"submit\"]"
 
 	// event detail
 	EventTitle      = "h1[id=\"title\"]"
