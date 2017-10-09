@@ -45,7 +45,7 @@ const (
 	NewEventMinute        = "form select[name=\"minute\"]"
 	NewEventMinuteLabel   = "form label[for=\"minute\"]"
 	NewEventMinuteOption  = "form select[name=\"minute\"] option"
-	NewEventSubmit        = "form button[name=\"submit\"][type=\"submit\"]"
+	NewEventSubmit        = "form [name=\"submit\"]"
 
 	// event detail
 	EventTitle      = "h1[id=\"title\"]"
@@ -54,5 +54,5 @@ const (
 	EventImage      = "img[id=\"image\"]"
 	EventAttendees  = "ul[id=\"attendees\"] li"
 	RsvpEmail       = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
-	RsvpEmailSubmit = "form button[type=\"submit\"]"
+	RsvpEmailSubmit = "form [name=\"submit\"]"
 )
