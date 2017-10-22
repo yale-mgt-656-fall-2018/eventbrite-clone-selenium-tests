@@ -300,6 +300,9 @@ requirement:
   [12factor app](https://12factor.net) principles (the starter code already)
   does.
 * Your code is not vulnerable to SQL injections, CSRF, or XSS.
+* Your git history demonstrates effective use of git, particularly informative
+  commits, a branching strategy, tagged releases (for example, at the end of
+  sprints), and effective documentation.
 
 ## Tips
 
