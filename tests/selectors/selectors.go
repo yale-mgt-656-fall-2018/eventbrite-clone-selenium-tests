@@ -11,6 +11,7 @@ const (
 
 	// home
 	TeamLogo        = "* img[id=\"logo\"]"
+	PageTitle       = "title"
 	EventList       = "ul li[class=\"event\"][id^=\"event-\"]"
 	EventTime       = "li[class=\"event\"][id^=\"event-\"] time"
 	EventDetailLink = "li[class=\"event\"][id^=\"event-\"] a[id=\"title\"][href*=\"/events/\"]" // how to specify title?
@@ -53,6 +54,6 @@ const (
 	EventLocation   = "span[id=\"location\"]"
 	EventImage      = "img[id=\"image\"]"
 	EventAttendees  = "ul[id=\"attendees\"] li"
-	RsvpEmail       = "form[method=\"POST\"] input[type=\"email\"][id=\"email\"][name=\"email\"]"
+	RsvpEmail       = "form[method=\"POST\"] input[type=\"email\"][name=\"email\"]"
 	RsvpEmailSubmit = "form [name=\"submit\"]"
 )

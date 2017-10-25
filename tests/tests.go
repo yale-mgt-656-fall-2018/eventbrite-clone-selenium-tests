@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"strings"
 	"time"
 
 	goselenium "github.com/bunsenapp/go-selenium"
@@ -107,17 +108,32 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		}
 	}
 
-	logExists := func(selector string, description string) bool {
-		result := cssSelectorExists(selector)
+	logExists := func(cssSelector string, description string) bool {
+		result := cssSelectorExists(cssSelector)
 		logTestResult(result, nil, description)
 		return result
 	}
+	logAllExist := func(description string, cssSelectors ...string) bool {
+		allExist := true
+		for _, cssSelector := range cssSelectors {
+			result := cssSelectorExists(cssSelector)
+			if result == false {
+				allExist = false
+				break
+			}
+		}
+		logTestResult(allExist, nil, description)
+		return allExist
+	}
 
-	checkEvent := func(eventNum int) {
-		driver.Go(testURL + "/events/" + fmt.Sprint(eventNum))
-
-		doLog("\nEvent " + fmt.Sprint(eventNum) + ":")
+	// Checks the structure of a randomly chosen event
+	checkEvent := func(maxEventNum int) {
+		eventNum := rand.Intn(3)
+		doLog("\nEvent " + fmt.Sprint(eventNum) + " (randomly chosen):")
 		time.Sleep(sleepDuration)
+
+		_, err := driver.Go(testURL + "/events/" + fmt.Sprint(eventNum))
+		logTestResult(true, err, "is reachable")
 
 		existanceTests := []existanceTest{
 			{selectors.BootstrapHref, "uses bootstrap"},
@@ -144,99 +160,93 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	_, err := driver.Go(testURL)
 	logTestResult(true, err, "is reachable")
 
-	result := cssSelectorExists(selectors.BootstrapHref)
-	logTestResult(result, nil, "looks 💯  with Bootstrap CSS ")
+	homepageTests := []existanceTest{
+		{selectors.PageTitle, "has a title"},
+		{selectors.BootstrapHref, "uses bootstrap"},
+		{selectors.Header, "has a header"},
+		{selectors.Footer, "has a footer"},
+		{selectors.FooterAboutLink, "has a link to the about page in footer"},
+		{selectors.FooterHomeLink, "has a link to the home page in footer"},
+		{selectors.TeamLogo, "has your team logo"},
+		{selectors.NewEventLink, "has a link to the new event page"},
+		{selectors.EventList, "has a list of events"},
+		{selectors.EventDetailLink, "each event links to a \"detail\" page"},
+		{selectors.EventTime, "each event shows its time"},
+	}
+	for _, t := range homepageTests {
+		logExists(t.selector, t.description)
+	}
 
-	result = cssSelectorExists(selectors.Header)
-	logTestResult(result, nil, "has a header")
-	result = cssSelectorExists(selectors.Footer)
-	logTestResult(result, nil, "has a footer")
-
-	result = cssSelectorExists(selectors.FooterHomeLink)
-	logTestResult(result, nil, "footer links to home page")
-	result = cssSelectorExists(selectors.FooterAboutLink)
-	logTestResult(result, nil, "footer links to about page")
-
-	result = cssSelectorExists(selectors.TeamLogo)
-	logTestResult(result, nil, "has your team logo")
-
-	result = cssSelectorExists(selectors.EventList)
-	logTestResult(result, nil, "shows a list of events")
-
-	linkResult := cssSelectorExists(selectors.EventDetailLink)
-	timeResult := cssSelectorExists(selectors.EventTime)
-	logTestResult(linkResult && timeResult, nil, "individual events link to details and show time")
-
-	result = cssSelectorExists(selectors.NewEventLink)
-	logTestResult(result, nil, "has a link to the new event page")
-
+	// TODO: test mobile responsiveness. Likely need to inject some JS into
+	// the DOM in order to accomplish this. Or, can we adjust the viewport
+	// size via WebDriver?
 	// doLog("\nMobile responsiveness:")
 	// result = cssSelectorExists(selectors.DesktopResponse)
 	// doLog(result)
 
-	_, err = driver.Go(testURL + "/about")
-	if err != nil {
-		return 0, 0, err
-	}
-
 	doLog("\nAbout page:")
 	time.Sleep(sleepDuration)
 
-	result = cssSelectorExists(selectors.Names)
+	_, err = driver.Go(testURL + "/about")
+	logTestResult(true, err, "should be reachable")
+
+	result := cssSelectorExists(selectors.Names)
 	logTestResult(result, nil, "has your names")
 
 	result = cssSelectorExists(selectors.Headshots)
 	logTestResult(result, nil, "shows your headshots")
 
-	checkEvent(rand.Intn(3))
-
-	_, err = driver.Go(testURL + "/events/new")
-	if err != nil {
-		return 0, 0, err
-	}
+	// Check the structure of one of the event pages
+	checkEvent(3)
 
 	doLog("\nNew event page:")
 	time.Sleep(sleepDuration)
 
-	result = cssSelectorExists(selectors.NewEventForm)
-	logTestResult(result, nil, "has a form for event submission")
+	_, err = driver.Go(testURL + "/events/new")
+	logTestResult(true, err, "is reachable")
 
-	titleResult := cssSelectorExists(selectors.NewEventTitle)
-	titleLabelResult := cssSelectorExists(selectors.NewEventTitleLabel)
-	logTestResult(titleResult && titleLabelResult, nil, "has a correctly labeled title field")
+	logExists(selectors.NewEventForm, "has a form for event submission")
+	logAllExist(
+		"the form has a title input field with label",
+		selectors.NewEventTitle,
+		selectors.NewEventTitleLabel,
+	)
+	logAllExist(
+		"the form has a image input field with label",
+		selectors.NewEventImage,
+		selectors.NewEventImageLabel,
+	)
+	logAllExist(
+		"the form has a location text field with label",
+		selectors.NewEventLocation,
+		selectors.NewEventLocationLabel,
+	)
+	logAllExist(
+		"the form has a dropdown field with label",
+		selectors.NewEventYear,
+		selectors.NewEventYearLabel,
+	)
+	logAllExist(
+		"the form has a month dropdown field with label",
+		selectors.NewEventMonth,
+		selectors.NewEventMonthLabel,
+	)
+	logAllExist(
+		"the form has a day dropdown field with label",
+		selectors.NewEventDay,
+		selectors.NewEventDayLabel,
+	)
+	logAllExist(
+		"the form has a hour dropdown field with label",
+		selectors.NewEventHour,
+		selectors.NewEventHourLabel,
+	)
 
-	imageResult := cssSelectorExists(selectors.NewEventImage)
-	imageLabelResult := cssSelectorExists(selectors.NewEventImageLabel)
-	logTestResult(imageResult && imageLabelResult, nil, "has a correctly labeled image field")
-
-	locationResult := cssSelectorExists(selectors.NewEventLocation)
-	locationLabelResult := cssSelectorExists(selectors.NewEventLocationLabel)
-	logTestResult(locationResult && locationLabelResult, nil, "has a correctly labeled location field")
-
-	yearResult := cssSelectorExists(selectors.NewEventYear)
-	yearLabelResult := cssSelectorExists(selectors.NewEventYearLabel)
-	yearOptionResult := countCSSSelector(selectors.NewEventYearOption)
-	logTestResult(yearResult && yearLabelResult && yearOptionResult == 2, nil, "has a labeled year field with correct options")
-
-	monthResult := cssSelectorExists(selectors.NewEventMonth)
-	monthLabelResult := cssSelectorExists(selectors.NewEventMonthLabel)
-	monthOptionResult := countCSSSelector(selectors.NewEventMonthOption)
-	logTestResult(monthResult && monthLabelResult && monthOptionResult == 12, nil, "has a labeled month field with correct options")
-
-	dayResult := cssSelectorExists(selectors.NewEventDay)
-	dayLabelResult := cssSelectorExists(selectors.NewEventDayLabel)
-	dayOptionResult := countCSSSelector(selectors.NewEventDayOption)
-	logTestResult(dayResult && dayLabelResult && dayOptionResult == 31, nil, "has a labeled day field with correct options")
-
-	hourResult := cssSelectorExists(selectors.NewEventHour)
-	hourLabelResult := cssSelectorExists(selectors.NewEventHourLabel)
-	hourOptionResult := countCSSSelector(selectors.NewEventHourOption)
-	logTestResult(hourResult && hourLabelResult && hourOptionResult == 24, nil, "has a labeled hour field with correct options")
-
-	minuteResult := cssSelectorExists(selectors.NewEventMinute)
-	minuteLabelResult := cssSelectorExists(selectors.NewEventMinuteLabel)
-	minuteOptionResult := countCSSSelector(selectors.NewEventMinuteOption)
-	logTestResult(minuteResult && minuteLabelResult && minuteOptionResult == 2, nil, "has a labeled minute field with correct options")
+	logAllExist(
+		"the form has a minute dropdown field with label",
+		selectors.NewEventMinute,
+		selectors.NewEventMinuteLabel,
+	)
 
 	badEvents := getBadEvents()
 	for _, event := range badEvents {
@@ -250,18 +260,22 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	}
 
 	apiTestData := createFormDataAPITest()
-	msg := "should allow event creation with valid parameters"
-	err2 := fillEventForm(driver, testURL+"/events/new", apiTestData)
+	msg := "should allow event creation with valid parameters, redirecting to the new event after creation"
 	time.Sleep(sleepDuration)
+	err2 := fillEventForm(driver, testURL+"/events/new", apiTestData)
+	result = false
 	if err2 == nil {
-		result = cssSelectorExists(selectors.RsvpEmail)
-		// this isn't checking for HTTP status codes
+		src, err3 := driver.PageSource()
+		if err3 == nil {
+			// This is in imperfect test. We're testing to see if the
+			// title of this new event occurs any where in the source
+			// of the page returned. This is the broadest test we could
+			// think of. Still, imperfect.
+			result = strings.Contains(src.Source, apiTestData.Title)
+		}
 	}
-	logTestResult(result, err2, msg)
+	logTestResult(result, nil, msg)
 
-	// how to check for correct options, not just count?
-
-	// _, err = driver.Go(testURL + "/api/events")
 	doLog("\nAPI:")
 	time.Sleep(sleepDuration)
 	success := testAPIResponse(testURL+"/api/events", func(ar apiResponse) bool {
@@ -269,10 +283,10 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	})
 	logTestResult(success, nil, "should return valid JSON")
 
-	success = testAPIResponse(testURL+"/api/events?search="+apiTestData.title, func(ar apiResponse) bool {
+	success = testAPIResponse(testURL+"/api/events?search="+apiTestData.Title, func(ar apiResponse) bool {
 		return len(ar.Events) == 1
 	})
-	logTestResult(success, nil, "should be searchable")
+	logTestResult(success, nil, "should be searchable by event title")
 
 	fmt.Printf("\n✅  Passed: %d", numPassed)
 	fmt.Printf("\n❌  Failed: %d\n\n", numFailed)

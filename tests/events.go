@@ -8,7 +8,7 @@ import (
 )
 
 type Event struct {
-	title    string
+	Title    string
 	location string
 	image    string
 	year     string
@@ -21,7 +21,7 @@ type Event struct {
 
 func randomEvent() Event {
 	e := Event{
-		title:    randomdata.Adjective() + " " + randomdata.Noun(),
+		Title:    randomdata.Adjective() + " " + randomdata.Noun(),
 		location: randomdata.City() + ", " + randomdata.State(randomdata.Small),
 		image:    "https://" + randomdata.Country(randomdata.FullCountry) + ".png", // ???
 		year:     strconv.Itoa(randomdata.Number(2016, 2017)),
@@ -35,7 +35,7 @@ func randomEvent() Event {
 
 func (e Event) createFormData() map[string]string {
 	data := map[string]string{
-		selectors.NewEventTitle:    e.title,
+		selectors.NewEventTitle:    e.Title,
 		selectors.NewEventImage:    e.image,
 		selectors.NewEventLocation: e.location,
 		selectors.NewEventYear:     e.year,
@@ -49,7 +49,7 @@ func (e Event) createFormData() map[string]string {
 
 func createFormDataAPITest() Event {
 	e := Event{
-		title:    randomString(45),
+		Title:    randomString(45),
 		location: "New Haven, CT",
 		image:    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Branford_Court_spring_2.JPG/250px-Branford_Court_spring_2.JPG",
 		year:     "2017",
@@ -67,12 +67,12 @@ func getBadEvents() []Event {
 
 	e = randomEvent()
 	e.flaw = "no title"
-	e.title = ""
+	e.Title = ""
 	events = append(events, e)
 
 	e = randomEvent()
 	e.flaw = "too-long title"
-	e.title = randomString(51)
+	e.Title = randomString(51)
 	events = append(events, e)
 
 	e = randomEvent()
