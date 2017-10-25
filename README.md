@@ -75,99 +75,67 @@ When all the tests pass, you should see this.
 
 ```
 Home page:
-😎  PASS - looks 💯  with Bootstrap CSS
-😎  PASS - has a header
-😎  PASS - has a footer
-😎  PASS - footer links to home page
-😎  PASS - footer links to about page
-😎  PASS - has your team logo
-😎  PASS - shows a list of events
-😎  PASS - individual events link to details and show time
-😎  PASS - has a link to the new event page
+✅  PASS - is reachable
+✅  PASS - has a title
+✅  PASS - uses bootstrap
+✅  PASS - has a header
+✅  PASS - has a footer
+✅  PASS - has a link to the about page in footer
+✅  PASS - has a link to the home page in footer
+✅  PASS - has your team logo
+✅  PASS - has a link to the new event page
+✅  PASS - has a list of events
+✅  PASS - each event links to a "detail" page
+✅  PASS - each event shows its time
 
 About page:
-😎  PASS - layout is correct
-😎  PASS - has your names
-😎  PASS - shows your headshots
+✅  PASS - should be reachable
+✅  PASS - has your names
+✅  PASS - shows your headshots
 
-Event 0:
-😎  PASS - uses bootstrap
-😎  PASS - has a header
-😎  PASS - has a footer
-😎  PASS - has a link to the about page in footer
-😎  PASS - has a link to the home page in footer
-😎  PASS - has a title
-😎  PASS - has a date
-😎  PASS - has a location
-😎  PASS - has an image
-😎  PASS - has a list of attendees
-😎  PASS - has a form to RSVP
-😎  PASS - should not allow RSVP with invalid email
-😎  PASS - should not allow RSVP with non-yale email
-😎  PASS - should allow RSVP with normal yale email
-😎  PASS - should allow RSVP with scrambled yale email
-😎  PASS - should allow RSVP with another scrambled yale email
-
-Event 1:
-😎  PASS - uses bootstrap
-😎  PASS - has a header
-😎  PASS - has a footer
-😎  PASS - has a link to the about page in footer
-😎  PASS - has a link to the home page in footer
-😎  PASS - has a title
-😎  PASS - has a date
-😎  PASS - has a location
-😎  PASS - has an image
-😎  PASS - has a list of attendees
-😎  PASS - has a form to RSVP
-😎  PASS - should not allow RSVP with invalid email
-😎  PASS - should not allow RSVP with non-yale email
-😎  PASS - should allow RSVP with normal yale email
-😎  PASS - should allow RSVP with scrambled yale email
-😎  PASS - should allow RSVP with another scrambled yale email
-
-Event 2:
-😎  PASS - uses bootstrap
-😎  PASS - has a header
-😎  PASS - has a footer
-😎  PASS - has a link to the about page in footer
-😎  PASS - has a link to the home page in footer
-😎  PASS - has a title
-😎  PASS - has a date
-😎  PASS - has a location
-😎  PASS - has an image
-😎  PASS - has a list of attendees
-😎  PASS - has a form to RSVP
-😎  PASS - should not allow RSVP with invalid email
-😎  PASS - should not allow RSVP with non-yale email
-😎  PASS - should allow RSVP with normal yale email
-😎  PASS - should allow RSVP with scrambled yale email
-😎  PASS - should allow RSVP with another scrambled yale email
+Event 2 (randomly chosen):
+✅  PASS - is reachable
+✅  PASS - uses bootstrap
+✅  PASS - has a header
+✅  PASS - has a footer
+✅  PASS - has a link to the about page in footer
+✅  PASS - has a link to the home page in footer
+✅  PASS - has a title
+✅  PASS - has a date
+✅  PASS - has a location
+✅  PASS - has an image
+✅  PASS - has a list of attendees
+✅  PASS - has a form to RSVP
+✅  PASS - should not allow RSVP with invalid email
+✅  PASS - should not allow RSVP with non-yale email
+✅  PASS - should allow RSVP with normal yale email
+✅  PASS - should allow RSVP with scrambled yale email
+✅  PASS - should allow RSVP with another scrambled yale email
 
 New event page:
-😎  PASS - layout is correct
-😎  PASS - has a form for event submission
-😎  PASS - has a correctly labeled title field
-😎  PASS - has a correctly labeled image field
-😎  PASS - has a correctly labeled location field
-😎  PASS - has a labeled year field with correct options
-😎  PASS - has a labeled month field with correct options
-😎  PASS - has a labeled day field with correct options
-😎  PASS - has a labeled hour field with correct options
-😎  PASS - has a labeled minute field with correct options
-😎  PASS - should not allow event with no title
-😎  PASS - should not allow event with too-long title
-😎  PASS - should not allow event with no image
-😎  PASS - should not allow event with bad image
-😎  PASS - should not allow event with no location
-😎  PASS - should not allow event with too-long location
-😎  PASS - should allow event with legal parameters
+✅  PASS - is reachable
+✅  PASS - has a form for event submission
+✅  PASS - the form has a title input field with label
+✅  PASS - the form has a image input field with label
+✅  PASS - the form has a location text field with label
+✅  PASS - the form has a dropdown field with label
+✅  PASS - the form has a month dropdown field with label
+✅  PASS - the form has a day dropdown field with label
+✅  PASS - the form has a hour dropdown field with label
+✅  PASS - the form has a minute dropdown field with label
+✅  PASS - should not allow event with no title
+✅  PASS - should not allow event with too-long title
+✅  PASS - should not allow event with no image
+✅  PASS - should not allow event with bad image
+✅  PASS - should not allow event with no location
+✅  PASS - should not allow event with too-long location
+✅  PASS - should allow event creation with valid parameters, redirecting to the new event after creation
 
 API:
-😎  PASS - should return valid JSON
-😎  PASS - should be searchable
+✅  PASS - should return valid JSON
+✅  PASS - should be searchable
 
-✅  Passed: 79
+✅  Passed: 51
 ❌  Failed: 0
 ```
 
@@ -187,23 +155,24 @@ All pages:
 
 Home page:
 * The home page should have your logo -- we'll look for an `img` tag with the
-  `id` 'logo'.
-* The home page should also have a link to the new event page with the `id` 'new'.
+  `id` "logo".
+* The home page should also have a link to the new event page at `/events/new`
+  and that link should have `id` "new".
 * Finally, the home page should have a list of events (a `ul` list, to be specific).
-  Each event's `li` should have:
-    * The `class` 'event' and the `id` 'event-x', where x is the event's id
+  Each event"s `li` should have:
+    * The `class` "event" and the `id` "event-x", where x is the event's id
       number.
-    * A link (an `a` element) with the `id` 'title' that links to the event's
+    * A link (an `a` element) with the `id` "title" that links to the event's
       detail page
     * A `time` tag with the event's date and time
 
 About page:
 * The about page should have all team members' names in a `span` with the `id`
-  'class-nickname-name', where class-nickname is, well, your class nickname
+  "class-nickname-name", where class-nickname is, well, your class nickname
   (check your profile on the course website if you're confused). Don't forget
   the dashes.
 * Additionally, we'll look for a picture of each team member with the `id`
-  'class-nickname-headshot'. (Note that this picture doesn't need to actually
+  "class-nickname-headshot". (Note that this picture doesn't need to actually
   be of the member -- we're not using computer vision to make sure you have
   decent headshots or anything -- but you do need an image for each member.)
 
@@ -223,34 +192,33 @@ New event page:
       great extension), `hour` should be 0-23, and `minute` should only have
       00 and 30 as options.
     * The submit button for the form should have its `name` attribute set to
-      'submit'.
+      "submit".
 * Errors for new event creation are:
     * No title, image, or location
     * Title or location longer than 50 characters
     * Image with a file extension other than `.png`, `jpg`/`jpeg`, or `.gif`
     * Image that doesn't exist online
 * You'll want to show an error message if any of the conditions above are met.
-  We'll be looking for them in a `ul` with the `class` 'form-errors.
+  We'll be looking for them in a `ul` with the `class` "form-errors'.
 
 Event detail pages:
 * Event detail pages should have the event's title in a `h1` element with the
-  `id` 'title', as well as the date and location in `span` elements with the
-  `id`s 'date' and 'location', respectively. The event's image should have the
-  `id` 'image'.
+  `id` "title", as well as the date and location in `span` elements with the
+  `id`s "date" and "location", respectively. The event's image should have the
+  `id` "image".
 * Event detail pages should also have a `ul` list of the attendees with the
-  `id` attendees. Each attendee (represented by their email) should be in a
+  `id` "attendees". Each attendee (represented by their email) should be in a
   list element with the class `list-group-item`. (Note that this list might
   not show up if you don't have any attendees yet, so for grading purposes
   it's probably a good idea to RSVP to your own events. Isn't that good
   form, anyway?)
 * Finally, event detail pages should have a `POST` form to RSVP. The input in
-  this form should have `name`, `id`, and `type` all set to 'email', and the
-  submit button should have `name` set to 'submit'.
+  this form should have `name`, `id`, and `type` all set to "email", and the
+  submit button should have `name` set to "submit".
     * This form should validate the email that you give it to make sure that
       it's a valid yale.edu email. However, it should accept any weird
       capitalizations as long as they're Yale emails, so something like
-      `kYle.JeNseN@yAlE.eDu` is acceptable (yes, this is just like that
-      SpongeBob meme).
+      `kYle.JeNseN@yAlE.eDu` is acceptable.
 
 API:
 * You should have an API running at `/api/events` that returns a valid JSON of
@@ -282,8 +250,8 @@ API:
 Note that while this document is our best effort at translating the tests into
 plain English, the grading code (most in `tests.go` in this repo) is the final
 source of truth. It's available to you to look through if you'd like (it's
-written in Go, which shouldn't be too hard to understand if you're feeling okay
-about JavaScript), and at the end of the day, your grade will be determined by
+written in Go, which shouldn't be too hard to understand),
+and at the end of the day, your grade will be determined by
 how many of the tests you're passing in the grading code, rather than their
 descriptions here. We're happy to walk you through the grading code in office
 hours if you're confused!
@@ -310,8 +278,9 @@ requirement:
 * The CSS selectors we are using to interact with your app are in the
   `selectors.go` file. You'll need to structure your HTML and CSS such that
   the code passes.
-* Use the `-fast` flag if you want to save some time.
+* Use the `-fast` flag if you want to save some time. It will cause the
+  tests to stop running at the first test that fails.
 * If you want to alter this code, you may! In particular, if you find a bug or
-  have an enhancement, I hope you'll send me a pull request. Simply clone with
+  have an enhancement, I hope you'll send us a pull request. Simply clone with
   repo into your `$GOPATH`. On my system, this code lives at `/Users/kljensen/go/src/github.com/yale-mgt-656/eventbrite-clone-selenium-tests`.
   Then run `go get` and `go build`. This was built with go1.8.3.
