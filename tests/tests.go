@@ -1,11 +1,9 @@
 package tests
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
+	"math/rand"
 	"time"
 
 	goselenium "github.com/bunsenapp/go-selenium"
@@ -47,17 +45,21 @@ type existanceTest struct {
 // Run - run all tests
 //
 func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast bool, sleepDuration time.Duration) (int, int, error) {
+	// Close down Selenium/Chromedriver on exit
+	defer driver.DeleteSession()
+
+	// Track how many tests passed and failed
 	numPassed := 0
 	numFailed := 0
+
+	// Log to the console, if we're in verbose mode
 	doLog := func(args ...interface{}) {
 		if verbose {
 			fmt.Println(args...)
 		}
 	}
-	die := func(msg string) {
-		driver.DeleteSession()
-		log.Fatalln(msg)
-	}
+
+	// Log a test result to the console. Incrementing num passed/failed.
 	logTestResult := func(passed bool, err error, testDesc string) {
 		doLog(statusText(passed && (err == nil)), "-", testDesc)
 		if passed && err == nil {
@@ -66,7 +68,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			numFailed++
 			if failFast {
 				time.Sleep(5000 * time.Millisecond)
-				die("Found first failing test, quitting")
+				log.Fatalln("Found first failing test, quitting")
 			}
 		}
 	}
@@ -82,7 +84,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		count := countCSSSelector(sel)
 		return (count != 0)
 	}
-	checkGoodRsvps := func(eventNum int) int {
+	checkGoodRsvps := func(eventNum int) {
 		goodRsvps := getGoodRsvps()
 		for _, rsvp := range goodRsvps {
 			numOriginalRsvps := countCSSSelector(selectors.EventAttendees)
@@ -93,9 +95,8 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			result := (numNewRsvps == (numOriginalRsvps + 1))
 			logTestResult(result, err2, msg)
 		}
-		return 1
 	}
-	checkBadRsvps := func(eventNum int) int {
+	checkBadRsvps := func(eventNum int) {
 		badRsvps := getBadRsvps()
 		for _, rsvp := range badRsvps {
 			msg := "should not allow RSVP with " + rsvp.flaw
@@ -104,7 +105,6 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			result := cssSelectorExists(selectors.Errors)
 			logTestResult(result, err2, msg)
 		}
-		return 1
 	}
 
 	logExists := func(selector string, description string) bool {
@@ -113,7 +113,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		return result
 	}
 
-	checkEvent := func(eventNum int) int {
+	checkEvent := func(eventNum int) {
 		driver.Go(testURL + "/events/" + fmt.Sprint(eventNum))
 
 		doLog("\nEvent " + fmt.Sprint(eventNum) + ":")
@@ -137,20 +137,12 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		}
 
 		checkBadRsvps(eventNum)
-
 		checkGoodRsvps(eventNum)
-
-		return 1
 	}
-
-	_, err := driver.Go(testURL)
-	if err != nil {
-		return 0, 0, err
-	}
-
-	time.Sleep(sleepDuration)
 
 	doLog("\nHome page:")
+	_, err := driver.Go(testURL)
+	logTestResult(true, err, "is reachable")
 
 	result := cssSelectorExists(selectors.BootstrapHref)
 	logTestResult(result, nil, "looks 💯  with Bootstrap CSS ")
@@ -190,23 +182,13 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	doLog("\nAbout page:")
 	time.Sleep(sleepDuration)
 
-	bootstrapResult := cssSelectorExists(selectors.BootstrapHref)
-	headerResult := cssSelectorExists(selectors.Header)
-	footerResult := cssSelectorExists(selectors.Footer)
-	footerHomeLinkResult := cssSelectorExists(selectors.FooterHomeLink)
-	footerAboutLinkResult := cssSelectorExists(selectors.FooterAboutLink)
-
-	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
-
 	result = cssSelectorExists(selectors.Names)
 	logTestResult(result, nil, "has your names")
 
 	result = cssSelectorExists(selectors.Headshots)
 	logTestResult(result, nil, "shows your headshots")
 
-	checkEvent(0)
-	checkEvent(1)
-	checkEvent(2)
+	checkEvent(rand.Intn(3))
 
 	_, err = driver.Go(testURL + "/events/new")
 	if err != nil {
@@ -215,14 +197,6 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	doLog("\nNew event page:")
 	time.Sleep(sleepDuration)
-
-	bootstrapResult = cssSelectorExists(selectors.BootstrapHref)
-	headerResult = cssSelectorExists(selectors.Header)
-	footerResult = cssSelectorExists(selectors.Footer)
-	footerHomeLinkResult = cssSelectorExists(selectors.FooterHomeLink)
-	footerAboutLinkResult = cssSelectorExists(selectors.FooterAboutLink)
-
-	logTestResult(bootstrapResult && headerResult && footerResult && footerHomeLinkResult && footerAboutLinkResult, nil, "layout is correct")
 
 	result = cssSelectorExists(selectors.NewEventForm)
 	logTestResult(result, nil, "has a form for event submission")
@@ -276,7 +250,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	}
 
 	apiTestData := createFormDataAPITest()
-	msg := "should allow event with legal parameters"
+	msg := "should allow event creation with valid parameters"
 	err2 := fillEventForm(driver, testURL+"/events/new", apiTestData)
 	time.Sleep(sleepDuration)
 	if err2 == nil {
@@ -289,76 +263,16 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	// _, err = driver.Go(testURL + "/api/events")
 	doLog("\nAPI:")
-	// time.Sleep(sleepDuration)
-
-	type EventJSON struct {
-		ID        int      `json:"id"`
-		Title     string   `json:"title"`
-		Date      string   `json:"date"`
-		Image     string   `json:"image"`
-		Location  string   `json:"location"`
-		Attending []string `json:"attending"`
-	}
-
-	type APIResponse struct {
-		Events []EventJSON `json:"events"`
-	}
-
-	client := http.Client{
-		Timeout: time.Second * 5,
-	}
-
-	success := true
-
-	req, reqErr := http.NewRequest(http.MethodGet, testURL+"/api/events", nil)
-	if reqErr != nil {
-		success = false
-	}
-
-	res, resErr := client.Do(req)
-	if resErr != nil {
-		success = false
-	}
-
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		success = false
-	}
-
-	allResponse := APIResponse{}
-	jsonErr := json.Unmarshal(body, &allResponse)
-	if jsonErr != nil {
-		success = false
-	}
-
+	time.Sleep(sleepDuration)
+	success := testAPIResponse(testURL+"/api/events", func(ar apiResponse) bool {
+		return true
+	})
 	logTestResult(success, nil, "should return valid JSON")
 
-	req, reqErr = http.NewRequest(http.MethodGet, testURL+"/api/events?search="+apiTestData.title, nil)
-	if reqErr != nil {
-		return 0, 0, err
-	}
-
-	res, resErr = client.Do(req)
-	if resErr != nil {
-		return 0, 0, err
-	}
-
-	body, readErr = ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		return 0, 0, err
-	}
-
-	searchResponse := APIResponse{}
-	jsonErr = json.Unmarshal(body, &searchResponse)
-	if jsonErr != nil {
-		return 0, 0, err
-	}
-
-	logTestResult((len(searchResponse.Events) == 1), nil, "should be searchable")
-	// elements, err := driver.FindElements(goselenium.ByCSSSelector(selectors.MobileResponse))
-	// if( elements[0].isDisplayed()){
-	// 	doLog("woot")
-	// }
+	success = testAPIResponse(testURL+"/api/events?search="+apiTestData.title, func(ar apiResponse) bool {
+		return len(ar.Events) == 1
+	})
+	logTestResult(success, nil, "should be searchable")
 
 	fmt.Printf("\n✅  Passed: %d", numPassed)
 	fmt.Printf("\n❌  Failed: %d\n\n", numFailed)
