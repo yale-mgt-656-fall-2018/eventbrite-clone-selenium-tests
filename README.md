@@ -2,6 +2,8 @@
 
 This is the repo for the testing program of the MGT656/MGT660 class project.
 The class project is a horrible clone of [Eventbrite](https://www.eventbrite.com).
+A completed version of the project is running at 
+[https://eventbrite-demo-app.herokuapp.com/](https://eventbrite-demo-app.herokuapp.com/).
 
 ## Important first caveats
 
