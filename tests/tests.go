@@ -222,7 +222,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		selectors.NewEventLocationLabel,
 	)
 	logAllExist(
-		"the form has a dropdown field with label",
+		"the form has a year dropdown field with label",
 		selectors.NewEventYear,
 		selectors.NewEventYearLabel,
 	)
