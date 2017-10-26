@@ -15,14 +15,14 @@ type RSVP struct {
 
 func randomEmail(yaleEmail bool, scramble bool) RSVP {
 	if yaleEmail == true {
-		coinflip := randomdata.Boolean()
 		var name string
 		var yale string
-		if coinflip == false {
-			name = randomdata.FirstName(randomdata.Male) + "." + randomdata.LastName()
+		if randomdata.Boolean() {
+			name = randomdata.FirstName(randomdata.Male)
 		} else {
-			name = randomdata.FirstName(randomdata.Female) + "." + randomdata.LastName()
+			name = randomdata.FirstName(randomdata.Female)
 		}
+		name += "." + randomdata.LastName()
 		if scramble == true {
 			yale = ""
 			y := randomdata.Boolean()
@@ -76,10 +76,9 @@ func randomEmail(yaleEmail bool, scramble bool) RSVP {
 		return RSVP{
 			email: name + "@" + yale,
 		}
-	} else {
-		return RSVP{
-			email: randomdata.Email(),
-		}
+	}
+	return RSVP{
+		email: randomdata.Email(),
 	}
 }
 
@@ -115,11 +114,7 @@ func getGoodRsvps() []RSVP {
 	rsvps = append(rsvps, r)
 
 	r = randomEmail(true, true)
-	r.attribute = "scrambled yale email"
-	rsvps = append(rsvps, r)
-
-	r = randomEmail(true, true)
-	r.attribute = "another scrambled yale email"
+	r.attribute = "mixed case yale email"
 	rsvps = append(rsvps, r)
 
 	return rsvps
