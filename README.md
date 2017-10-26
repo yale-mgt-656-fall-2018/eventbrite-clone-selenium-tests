@@ -2,14 +2,13 @@
 
 This is the repo for the testing program of the MGT656/MGT660 class project.
 The class project is a horrible clone of [Eventbrite](https://www.eventbrite.com).
-A completed version of the project is running at 
+A completed version of the project is running at
 [https://eventbrite-demo-app.herokuapp.com/](https://eventbrite-demo-app.herokuapp.com/).
 
 ## Important first caveats
 
 Please note, it is *a certainty* that we will make changes to the project
-requirements mid-project. Also, we will find bugs and deficiencies in this code.
-When, we'll release different versions of the testing code and we'll use
+requirements mid-project. Also, we will find bugs and deficiencies in this code, so we'll release different versions of the testing code and we'll use
 only the latest version when grading your project at the end of the semester.
 
 ## Running the tests
@@ -151,11 +150,12 @@ Here's what we're testing your app for:
 
 All pages:
 * Every page should look good - *really good*. We can't check for tastefulness
-  in an automated fashion, so instead we'll test for That means including the
+  in an automated fashion, so instead we'll test for the presence of the
   Bootstrap CSS stylesheet in the `head` of the page -- we'll be looking for a
   `link` with an `href` that contains `bootstrap`.
 * Every page should have a `header`.
 * Every page should have a `footer` with links to the home page and about page.
+* Every page should have a `title`.
 * Grading note: we're defining 'every page' as `/`, `/about`, `/events/new`,
   `/events/0`, `/events/1`, and `/events/2`.
 
