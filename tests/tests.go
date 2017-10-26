@@ -250,7 +250,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	badEvents := getBadEvents()
 	for _, event := range badEvents {
-		msg := "should not allow event with " + event.flaw
+		msg := "should not allow user to submit event with " + event.flaw
 		err2 := fillEventForm(driver, testURL+"/events/new", event)
 		time.Sleep(sleepDuration)
 		if err2 == nil {
@@ -258,6 +258,15 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		}
 		logTestResult(result, err2, msg)
 	}
+
+	// client := http.Client{
+	// 	Timeout: time.Second * 5,
+	// }
+	// response, err := client.PostForm(testURL+"/events/new", badEvents[0].getURLValues())
+	// fmt.Println(response.
+	// fmt.Println(err)
+	// fmt.Println(response)
+	// return 1, 1, nil
 
 	apiTestData := createFormDataAPITest()
 	msg := "should allow event creation with valid parameters, redirecting to the new event after creation"
