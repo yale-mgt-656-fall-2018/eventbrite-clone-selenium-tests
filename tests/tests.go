@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"strings"
 
 	goselenium "github.com/bunsenapp/go-selenium"
 	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
@@ -267,6 +268,25 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	badEvents := getBadEvents()
 	for _, event := range badEvents {
 		msg := "should not allow event with " + event.flaw
+		if event.js == true {
+			if strings.Contains(event.flaw, "year"){
+				command := "$(\"" + selectors.NewEventYear + "\").replaceWith(\"<option>" + event.year + "</option>\");"
+				driver.ExecuteScript(command)
+			} else if strings.Contains(event.flaw, "month"){
+				command := "$(\"" + selectors.NewEventMonth + "\").replaceWith(\"<option>" + event.month + "</option>\");"
+				driver.ExecuteScript(command)
+			} else if strings.Contains(event.flaw, "day"){
+				command := "$(\"" + selectors.NewEventDay + "\").replaceWith(\"<option>" + event.day + "</option>\");"
+				driver.ExecuteScript(command)
+			} else if strings.Contains(event.flaw, "hour"){
+				command := "$(\"" + selectors.NewEventHour + "\").replaceWith(\"<option>" + event.hour + "</option>\");"
+				driver.ExecuteScript(command)
+			} else if strings.Contains(event.flaw, "minute"){
+				command := "$(\"" + selectors.NewEventMinute + "\").replaceWith(\"<option>" + event.minute + "</option>\");"
+				driver.ExecuteScript(command)
+			}
+		}
+
 		err2 := fillEventForm(driver, testURL+"/events/new", event)
 		time.Sleep(sleepDuration)
 		if err2 == nil {

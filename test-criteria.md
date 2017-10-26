@@ -29,6 +29,7 @@ New event page:
     * Title or location longer than 50 characters
     * Image with a file extension other than `.png`, `jpg`/`jpeg`, or `.gif`
     * Image that doesn't exist online
+    * Illegal date/time (outside of the dropdown options) -- yes, we have a way to test this!
 * You'll want to show an error message if any of the conditions above are met. We'll be looking for them in a `ul` with the `class` 'form-errors.
 
 Event detail pages:

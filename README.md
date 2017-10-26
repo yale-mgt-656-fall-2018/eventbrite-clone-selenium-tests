@@ -44,8 +44,10 @@ including at my demo apps. In my experience, ChromeDriver is a little faster tha
 When all the tests pass, you should see this.
 
 ```
+Jacobs-MacBook-Pro:eventbrite-clone-selenium-tests jacobbendicksen$ ./eventbrite-clone-selenium-tests "http://localhost:4444/wd/hub" "http://localhost:3500"
+
 Home page:
-😎  PASS - looks 💯  with Bootstrap CSS 
+😎  PASS - looks 💯  with Bootstrap CSS
 😎  PASS - has a header
 😎  PASS - has a footer
 😎  PASS - footer links to home page
@@ -131,13 +133,24 @@ New event page:
 😎  PASS - should not allow event with bad image
 😎  PASS - should not allow event with no location
 😎  PASS - should not allow event with too-long location
+😎  PASS - should not allow event with year too high
+😎  PASS - should not allow event with year too low
+😎  PASS - should not allow event with month too high
+😎  PASS - should not allow event with month too low
+😎  PASS - should not allow event with day too high
+😎  PASS - should not allow event with day too low
+😎  PASS - should not allow event with hour too high
+😎  PASS - should not allow event with hour too low
+😎  PASS - should not allow event with minute too high
+😎  PASS - should not allow event with minute in middle
+😎  PASS - should not allow event with minute too low
 😎  PASS - should allow event with legal parameters
 
 API:
 😎  PASS - should return valid JSON
 😎  PASS - should be searchable
 
-✅  Passed: 79
+✅  Passed: 90
 ❌  Failed: 0
 ```
 
