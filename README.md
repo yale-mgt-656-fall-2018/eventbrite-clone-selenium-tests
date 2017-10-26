@@ -196,8 +196,8 @@ New event page:
 * Errors for new event creation are:
     * No title, image, or location
     * Title or location longer than 50 characters
-    * Image with a file extension other than `.png`, `jpg`/`jpeg`, or `.gif`
-    * Image that doesn't exist online
+    * Image with a file extension other than `.png`, `.jpg`, or `.gif`
+    * An image that is not a valid URL
 * You'll want to show an error message if any of the conditions above are met.
   We'll be looking for them in a `ul` with the `class` "form-errors'.
 

@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"net/url"
 	"strconv"
 
 	randomdata "github.com/Pallinder/go-randomdata"
@@ -46,6 +47,17 @@ func (e Event) createFormData() map[string]string {
 	}
 	return data
 }
+func (e Event) getURLValues() url.Values {
+	return url.Values{
+		"title":    []string{e.Title},
+		"location": []string{e.location},
+		"image":    []string{e.image},
+		"year":     []string{e.year},
+		"month":    []string{e.month},
+		"day":      []string{e.day},
+		"minute":   []string{e.minute},
+	}
+}
 
 func createFormDataAPITest() Event {
 	e := Event{
@@ -81,8 +93,13 @@ func getBadEvents() []Event {
 	events = append(events, e)
 
 	e = randomEvent()
-	e.flaw = "bad image"
-	e.image = "branford-friends-always.jpeg"
+	e.flaw = "image that is not a valid URL"
+	e.image = "branford-friends-always.foo"
+	events = append(events, e)
+
+	e = randomEvent()
+	e.flaw = "image that does not end with .png, .gif, or .jpg"
+	e.image = "http://foo.com/branford-friends-always.foo"
 	events = append(events, e)
 
 	e = randomEvent()
