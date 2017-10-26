@@ -5,9 +5,9 @@ The class project is a horrible clone of [Eventbrite](https://www.eventbrite.com
 
 ## Important first caveats
 
-Please note, it is possible (indeed, likely) that we will discover bugs in the
-testing code, or make changes to the project requirements mid-project. If that
-happens, we'll release different versions of the testing code and we'll use
+Please note, it is *a certainty* that we will make changes to the project
+requirements mid-project. Also, we will find bugs and deficiencies in this code.
+When, we'll release different versions of the testing code and we'll use
 only the latest version when grading your project at the end of the semester.
 
 ## Running the tests
