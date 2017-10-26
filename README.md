@@ -55,14 +55,17 @@ chromedriver --port 4444
 Clearly, you can use whatever port you want. Then, you run the test code like this
 
 ```
-eventbrite-clone-selenium-tests "http://localhost:4444/wd/hub" "http://localhost:8000"
+eventbrite-clone-selenium-tests-$ARCH-$VERSION test "http://localhost:4444/wd/hub" "http://localhost:8000"
 ```
 
 if you are using selenium or
 
 ```
-eventbrite-clone-selenium-tests "http://localhost:4444" "http://localhost:8000"
+eventbrite-clone-selenium-tests-$ARCH-$VERSION test "http://localhost:4444" "http://localhost:8000"
 ```
+
+where "eventbrite-clone-selenium-tests-$ARCH-$VERSION" might be
+"eventbrite-clone-selenium-tests-windows-v2.1" or similar.
 
 if you are using ChromeDriver (with which you don't need `/wd/hub`). That will run
 the tests against your app running on port `8000` on `localhost`. You can, of
