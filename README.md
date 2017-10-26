@@ -12,9 +12,10 @@ only the latest version when grading your project at the end of the semester.
 
 ## Running the tests
 
-You can download binaries/executables for the testing program here:
-
-* Binaries coming soon...
+You can find binaries/executables for the testing program in the 'releases'
+directory. Each release uses semantic versioning, such that "v2.1" indicates
+a minor change from "v2.0"---that change not effecting grading. When the change
+we make effects grading, we'll make a "major" release like "v3.0".
 
 After you download the binary that corresponds to your operating system, you'll
 need to make the code executable (likely `chmod` or the Windows equivalent). The
