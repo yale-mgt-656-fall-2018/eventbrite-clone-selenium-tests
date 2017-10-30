@@ -35,7 +35,7 @@ func RunForURL(seleniumURL string, testURL string, failFast bool, sleepDuration 
 	// Delete the session once this function is completed.
 	defer driver.DeleteSession()
 
-	return Run(driver, testURL, true, failFast, sleepDuration)
+	return Run(driver, strings.TrimSuffix(testURL, "/"), true, failFast, sleepDuration)
 }
 
 type existanceTest struct {
