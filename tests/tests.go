@@ -43,6 +43,31 @@ type existanceTest struct {
 	description string
 }
 
+func handleC9SplashPage(driver goselenium.WebDriver) {
+	// If this is a cloud9 URL, let's make sure our test is not
+	// ruined by their "click-through" warning about app previews.
+	// We do this by setting a cookie that makes it look like we
+	// already visited.
+	url, err := driver.CurrentURL()
+	if err == nil && strings.Contains(strings.ToLower(url.URL), "c9users") {
+		c := &goselenium.Cookie{
+			Name:  "c9.live.user.click-through",
+			Value: "ok",
+			// Domain: "kyle-cold-grain-project-kljensen.c9users.io",
+			// Path:   "/",
+		}
+		driver.AddCookie(c)
+		cookies, err2 := driver.AllCookies()
+		if err2 == nil {
+			log.Printf("Found %d cookies\n", len(cookies.Cookies))
+			for _, cookie := range cookies.Cookies {
+				log.Println(cookie.Name)
+			}
+		}
+	}
+	_, err = driver.Go(url.URL)
+}
+
 // Run - run all tests
 //
 func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast bool, sleepDuration time.Duration) (int, int, error) {
@@ -156,6 +181,9 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 
 	doLog("\nHome page:")
 	_, err := driver.Go(testURL)
+	if err == nil {
+		handleC9SplashPage(driver)
+	}
 	logTestResult(true, err, "is reachable")
 
 	homepageTests := []existanceTest{
