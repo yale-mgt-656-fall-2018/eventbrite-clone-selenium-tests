@@ -46,8 +46,6 @@ type existanceTest struct {
 // Run - run all tests
 //
 func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast bool, sleepDuration time.Duration) (int, int, error) {
-	// Close down Selenium/Chromedriver on exit
-	defer driver.DeleteSession()
 
 	// Track how many tests passed and failed
 	numPassed := 0
