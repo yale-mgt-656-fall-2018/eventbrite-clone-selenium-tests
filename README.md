@@ -116,6 +116,7 @@ Event 2 (randomly chosen):
 ✅  PASS - should allow RSVP with normal yale email
 ✅  PASS - should allow RSVP with scrambled yale email
 ✅  PASS - should allow RSVP with another scrambled yale email
+✅  PASS - has a link to donate
 
 New event page:
 ✅  PASS - is reachable
@@ -218,13 +219,17 @@ Event detail pages:
   not show up if you don't have any attendees yet, so for grading purposes
   it's probably a good idea to RSVP to your own events. Isn't that good
   form, anyway?)
-* Finally, event detail pages should have a `POST` form to RSVP. The input in
+* Event detail pages should have a `POST` form to RSVP. The input in
   this form should have `name`, `id`, and `type` all set to "email", and the
   submit button should have `name` set to "submit".
     * This form should validate the email that you give it to make sure that
       it's a valid yale.edu email. However, it should accept any weird
       capitalizations as long as they're Yale emails, so something like
       `kYle.JeNseN@yAlE.eDu` is acceptable.
+* Event detail pages should have a link that allows the user to donate. This
+  should be an `a` element with `id="donate"`. (See the question below about
+  tracking user behavior related to donation.)
+
 
 API:
 * You should have an API running at `/api/events` that returns a valid JSON of
@@ -261,6 +266,50 @@ and at the end of the day, your grade will be determined by
 how many of the tests you're passing in the grading code, rather than their
 descriptions here. We're happy to walk you through the grading code in office
 hours if you're confused!
+
+## Analytics questions
+
+Each of your event pages should have a link that allows hypothetical users
+to donate to support the event. (This should look something like as follows:)
+
+"""html
+Want to contribute? <a href="/donate" id="donate">Donate</a> now!
+"""
+
+We will be sending users to your website. Those users will come from
+one of the following websites:
+
+"""
+http://som.yale.edu/
+http://divinity.yale.edu/
+http://medicine.yale.edu/
+http://law.yale.edu/
+http://search.yale.edu
+"""
+
+Those users will land on your homepage, and then, with some probability,
+click to an event detail page and, with some probability, click on your
+solicitation to donate. Their inclination to donate will be modulated by
+the text of the donation link. In particular, I'd like you to test the
+effectiveness of "Donate" vs "Support". That is, you should test the effectiveness
+of these two combinations:
+
+"""html
+Want to contribute? <a href="/donate" id="donate">Donate</a> now!
+"""
+
+and
+
+"""html
+Want to contribute? <a href="/donate" id="donate">Support</a> now!
+"""
+
+In the final project report, we will ask you which is most effective at
+getting the website visitors to donate, that is, click on the link.
+
+We will also ask you to report where you traffic is coming from and
+potentially which of the traffic source most generously donates.
+
 
 ## Additional MGT660 requirements
 

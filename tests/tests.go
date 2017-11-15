@@ -53,17 +53,8 @@ func handleC9SplashPage(driver goselenium.WebDriver) {
 		c := &goselenium.Cookie{
 			Name:  "c9.live.user.click-through",
 			Value: "ok",
-			// Domain: "kyle-cold-grain-project-kljensen.c9users.io",
-			// Path:   "/",
 		}
 		driver.AddCookie(c)
-		cookies, err2 := driver.AllCookies()
-		if err2 == nil {
-			log.Printf("Found %d cookies\n", len(cookies.Cookies))
-			for _, cookie := range cookies.Cookies {
-				log.Println(cookie.Name)
-			}
-		}
 	}
 	_, err = driver.Go(url.URL)
 }
@@ -170,6 +161,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			{selectors.EventImage, "has an image"},
 			{selectors.EventAttendees, "has a list of attendees"},
 			{selectors.RsvpEmail, "has a form to RSVP"},
+			{selectors.EventDonationLink, "has a link to donate"},
 		}
 		for _, t := range existanceTests {
 			logExists(t.selector, t.description)

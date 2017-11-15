@@ -49,11 +49,12 @@ const (
 	NewEventSubmit        = "form [name=\"submit\"]"
 
 	// event detail
-	EventTitle      = "h1[id=\"title\"]"
-	EventDate       = "span[id=\"date\"]"
-	EventLocation   = "span[id=\"location\"]"
-	EventImage      = "img[id=\"image\"]"
-	EventAttendees  = "ul[id=\"attendees\"] li"
-	RsvpEmail       = "form[method=\"POST\"] input[type=\"email\"][name=\"email\"]"
-	RsvpEmailSubmit = "form [name=\"submit\"]"
+	EventTitle        = "h1[id=\"title\"]"
+	EventDate         = "span[id=\"date\"]"
+	EventLocation     = "span[id=\"location\"]"
+	EventImage        = "img[id=\"image\"]"
+	EventAttendees    = "ul[id=\"attendees\"] li"
+	RsvpEmail         = "form[method=\"POST\"] input[type=\"email\"][name=\"email\"]"
+	RsvpEmailSubmit   = "form [name=\"submit\"]"
+	EventDonationLink = "a[id=\"donate\"]"
 )
