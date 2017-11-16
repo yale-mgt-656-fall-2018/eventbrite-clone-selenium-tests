@@ -272,20 +272,20 @@ hours if you're confused!
 Each of your event pages should have a link that allows hypothetical users
 to donate to support the event. (This should look something like as follows:)
 
-"""html
+```html
 Want to contribute? <a href="/donate" id="donate">Donate</a> now!
-"""
+```
 
 We will be sending users to your website. Those users will come from
 one of the following websites:
 
-"""
+```
 http://som.yale.edu/
 http://divinity.yale.edu/
 http://medicine.yale.edu/
 http://law.yale.edu/
 http://search.yale.edu
-"""
+```
 
 Those users will land on your homepage, and then, with some probability,
 click to an event detail page and, with some probability, click on your
@@ -294,15 +294,15 @@ the text of the donation link. In particular, I'd like you to test the
 effectiveness of "Donate" vs "Support". That is, you should test the effectiveness
 of these two combinations:
 
-"""html
+```html
 Want to contribute? <a href="/donate" id="donate">Donate</a> now!
-"""
+```
 
 and
 
-"""html
+```html
 Want to contribute? <a href="/donate" id="donate">Support</a> now!
-"""
+```
 
 In the final project report, we will ask you which is most effective at
 getting the website visitors to donate, that is, click on the link.
