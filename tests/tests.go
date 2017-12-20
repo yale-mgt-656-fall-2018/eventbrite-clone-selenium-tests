@@ -13,7 +13,7 @@ import (
 
 // RunForURL - runs the test given a target URL
 //
-func RunForURL(seleniumURL string, testURL string, failFast bool, sleepDuration time.Duration) (int, int, error) {
+func RunForURL(seleniumURL string, testURL string, verbose bool, failFast bool, sleepDuration time.Duration) (int, int, error) {
 	// Create capabilities, driver etc.
 	capabilities := goselenium.Capabilities{}
 	capabilities.SetBrowser(goselenium.ChromeBrowser())
@@ -35,7 +35,7 @@ func RunForURL(seleniumURL string, testURL string, failFast bool, sleepDuration 
 	// Delete the session once this function is completed.
 	defer driver.DeleteSession()
 
-	return Run(driver, strings.TrimSuffix(testURL, "/"), true, failFast, sleepDuration)
+	return Run(driver, strings.TrimSuffix(testURL, "/"), verbose, failFast, sleepDuration)
 }
 
 type existanceTest struct {
