@@ -315,8 +315,8 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	})
 	logTestResult(success, nil, "should be searchable by event title")
 
-	fmt.Printf("\n✅  Passed: %d", numPassed)
-	fmt.Printf("\n❌  Failed: %d\n\n", numFailed)
+	doLog("\n✅  Passed: %d", numPassed)
+	doLog("\n❌  Failed: %d\n\n", numFailed)
 
 	return numPassed, numFailed, err
 }
