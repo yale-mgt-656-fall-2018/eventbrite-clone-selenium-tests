@@ -8,6 +8,8 @@ import (
 	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
 )
 
+// Event - encapsulates data on an event
+// we would submit to the eventbrite clone.
 type Event struct {
 	Title    string
 	location string

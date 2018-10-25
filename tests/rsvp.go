@@ -7,6 +7,7 @@ import (
 	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
 )
 
+// RSVP - encapsulates information about a person attending an event.
 type RSVP struct {
 	email     string
 	flaw      string
