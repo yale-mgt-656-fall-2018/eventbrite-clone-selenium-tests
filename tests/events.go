@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	randomdata "github.com/Pallinder/go-randomdata"
-	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
+	"github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/tests/selectors"
 )
 
 // Event - encapsulates data on an event

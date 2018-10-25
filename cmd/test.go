@@ -4,8 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"time"
 
-	eventtests "github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests"
+	eventtests "github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/tests"
 
 	"github.com/spf13/cobra"
 )
@@ -38,7 +39,7 @@ them as arguments to this program.`,
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		eventtests.RunForURL(args[0], args[1], false, 0)
+		eventtests.RunForURL(args[0], args[1], true, false, 2*time.Second)
 	},
 }
 

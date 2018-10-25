@@ -11,7 +11,7 @@ const (
 
 	// home
 	TeamLogo        = "* img[id=\"logo\"]"
-	PageTitle       = "title"
+	PageTitle       = "title:contains(\"event\")"
 	EventList       = "ul li[class=\"event\"][id^=\"event-\"]"
 	EventTime       = "li[class=\"event\"][id^=\"event-\"] time"
 	EventDetailLink = "li[class=\"event\"][id^=\"event-\"] a[id=\"title\"][href*=\"/events/\"]" // how to specify title?

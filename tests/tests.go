@@ -8,7 +8,7 @@ import (
 	"time"
 
 	goselenium "github.com/bunsenapp/go-selenium"
-	"github.com/yale-mgt-656/eventbrite-clone-selenium-tests/tests/selectors"
+	"github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/tests/selectors"
 )
 
 // RunForURL - runs the test given a target URL
@@ -43,7 +43,7 @@ type existanceTest struct {
 	description string
 }
 
-func handleC9SplashPage(driver goselenium.WebDriver) {
+func handleC9SplashPage(driver goselenium.WebDriver) (*goselenium.GoResponse, error) {
 	// If this is a cloud9 URL, let's make sure our test is not
 	// ruined by their "click-through" warning about app previews.
 	// We do this by setting a cookie that makes it look like we
@@ -56,7 +56,7 @@ func handleC9SplashPage(driver goselenium.WebDriver) {
 		}
 		driver.AddCookie(c)
 	}
-	_, err = driver.Go(url.URL)
+	return driver.Go(url.URL)
 }
 
 // Run - run all tests
@@ -146,8 +146,8 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 		doLog("\nEvent " + fmt.Sprint(eventNum) + " (randomly chosen):")
 		time.Sleep(sleepDuration)
 
-		_, err := driver.Go(testURL + "/events/" + fmt.Sprint(eventNum))
-		logTestResult(true, err, "is reachable")
+		_, _ = driver.Go(testURL + "/events/" + fmt.Sprint(eventNum))
+		// logTestResult(true, err, "is reachable")
 
 		existanceTests := []existanceTest{
 			{selectors.BootstrapHref, "uses bootstrap"},
@@ -174,12 +174,11 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	doLog("\nHome page:")
 	_, err := driver.Go(testURL)
 	if err == nil {
-		handleC9SplashPage(driver)
+		_, err = handleC9SplashPage(driver)
 	}
-	logTestResult(true, err, "is reachable")
 
 	homepageTests := []existanceTest{
-		{selectors.PageTitle, "has a title"},
+		{selectors.PageTitle, "has a title that includes the string \"event\""},
 		{selectors.BootstrapHref, "uses bootstrap"},
 		{selectors.Header, "has a header"},
 		{selectors.Footer, "has a footer"},
@@ -205,14 +204,14 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	doLog("\nAbout page:")
 	time.Sleep(sleepDuration)
 
-	_, err = driver.Go(testURL + "/about")
-	logTestResult(true, err, "should be reachable")
+	_, _ = driver.Go(testURL + "/about")
+	// logTestResult(true, err, "should be reachable")
 
 	result := cssSelectorExists(selectors.Names)
 	logTestResult(result, nil, "has your names")
 
 	result = cssSelectorExists(selectors.Headshots)
-	logTestResult(result, nil, "shows your headshots")
+	logTestResult(result, nil, "shows your headshots (no necessarily real)")
 
 	// Check the structure of one of the event pages
 	checkEvent(3)
@@ -221,7 +220,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	time.Sleep(sleepDuration)
 
 	_, err = driver.Go(testURL + "/events/new")
-	logTestResult(true, err, "is reachable")
+	// logTestResult(true, err, "is reachable")
 
 	logExists(selectors.NewEventForm, "has a form for event submission")
 	logAllExist(
@@ -315,8 +314,8 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	})
 	logTestResult(success, nil, "should be searchable by event title")
 
-	doLog("\n✅  Passed: %d", numPassed)
-	doLog("\n❌  Failed: %d\n\n", numFailed)
+	doLog(fmt.Sprintf("\n✅  Passed: %d", numPassed))
+	doLog(fmt.Sprintf("\n❌  Failed: %d\n\n", numFailed))
 
 	return numPassed, numFailed, err
 }
