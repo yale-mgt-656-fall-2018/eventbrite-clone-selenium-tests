@@ -13,8 +13,8 @@ only the latest version when grading your project at the end of the semester.
 
 ## Running the tests
 
-You can find binaries/executables for the testing program in the 'releases'
-directory. Each release uses semantic versioning, such that "v2.1" indicates
+You can find binaries/executables for the testing program in the [releases](https://github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/releases)
+tab on GitHub. Each release uses semantic versioning, such that "v2.1" indicates
 a minor change from "v2.0"---that change not affecting grading. When the change
 we make affects grading, we'll make a "major" release like "v3.0".
 
