@@ -1,15 +1,73 @@
-# Eventbrite clone automated tests
+## Background
 
 This is the repo for the testing program of the MGT656/MGT660 class project.
 The class project is a horrible clone of [Eventbrite](https://www.eventbrite.com).
 A completed version of the project is running at
 [https://eventbrite-demo-app.herokuapp.com/](https://eventbrite-demo-app.herokuapp.com/).
 
-## Important first caveats
+## CAVEATS
 
-Please note, it is *a certainty* that we will make changes to the project
-requirements mid-project. Also, we will find bugs and deficiencies in this code, so we'll release different versions of the testing code and we'll use
-only the latest version when grading your project at the end of the semester.
+You ought to keep the following caveats in mind:
+
+- This document is not sacrosact. It contains errors and omissions. It will change. Changes will come as we identify errors and omissions and as we add new requirements to the class project.
+- If you like us to make a change to this document or the grading code,
+  please [create an issue](https://github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/issues). If you're particularly bold, you can send us a pull request
+  for changes to the grading code---that would be awesome!
+- We will update this document, discuss changes in class, and also post on Piazza when we have changes.
+- Some of the project grade are your weekly reports. Some of the project grade
+  is the final submission. The final submission will be run through the latest
+  iteration of the grading code and that will determin the bulk of the grade.
+  Some component will likely be UX/UI assessments performed by people on Amazon
+  Turk or similar. I don't know the precise fractions yet. For 660, some component
+  of the grade will be code review particular for evidence of
+  compilance with the [12factor app](https://12factor.net/) philosophy, data
+  persistance architecture, and good devops practices such as automated testing.
+- Obviously, in the "real world" your "boss" wouldn't write your automated test
+  suite and you'd write your own. Nor would you likely write "end-to-end" tests
+  as I've done here. I'm trying to make a compromise between "real world" and
+  giving you guidance/feedback through tests.
+- Do not wait to get started. There will be benefits to having running code
+  quickly.
+
+## Getting started
+
+You should accept invite via GitHub Classroom that will create a
+repository on GitHub with starter code that I think you'll find useful.
+You must start with my starter code in order to get your repo on GitHub
+set up with permissions such that I can look at your project.
+(But, you don't have to use my code if you don't want!)
+
+You will be working in teams and each team will share a repo on GitHub
+in your class's GitHub organization. Your team is shown in your "Dashboard"
+on the class website. (That is http://656.mba or http://660.mba)
+I am giving you starter code---the starter code for MGT656 and
+MGT660 are *different*. Each class
+has a GitHub Classroom invite link and when you accept the invite, 
+it will get you "set up". When you accept the GitHub classroom invite,
+you will be prompted to either join a team or to create a new team.
+*If you see your team's name, please join it, if you don't, please create it.*
+
+| Class | Invite Link |
+| --- | --- |
+| MGT656 | See https://www.656.mba/#assignments/project-sprint-1 |
+| MGT660 | TBD |
+
+
+## Project workflow and deployment
+
+Your will keep track of your work using the git version control system and deploy your application to Heroku, a cloud platform-as-a-service, or similar. You should use the [GitHub project management features](https://github.com/features/project-management) in order to track your team's progress in an agile fashion, plan sprints, etc.
+
+- You do not, and likely should not, complete the project in the order of the stories that you see above.
+- The stories do not have a 1-to-1 correspondence with the
+  tasks you need to complete. For example, a single bullet point may require
+  a number of steps that you want to enumerate as issues on GitHub. Similarly,
+  sometimes a single task will satisfy a number of the tests.
+
+You will be using version control to track your application. We suggest
+that you use one of the workflows described in
+[this article by Atlassian](https://www.atlassian.com/git/tutorials/comparing-workflows/centralized-workflow),
+preferrably the centralized or "feature branch" workflow.
+
 
 ## Running the tests
 
@@ -22,16 +80,15 @@ After you download the binary that corresponds to your operating system, you'll
 need to make the code executable (likely `chmod` or the Windows equivalent). The
 code runs the tests by automating a browser via the
 [WebDriver](https://www.w3.org/TR/webdriver/) protocol. When I completed the
-assignment, I used either [Selenium stand-alone
-server](http://www.seleniumhq.org/download/) or
+assignment, I used 
 [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) as my
-interface to Chrome. You'll need to download those programs and run them too.
+interface to Chrome. You'll need to download that program and run it too.
 What's going to happen is as follows
 
 1. you'll run your team's app *somewhere* (like Cloud9 or Heroku);
-2. you'll run selenium or chromedriver on your own computer;
+2. you'll run chromedriver on your own computer;
 3. you'll run this testing program on your own computer, telling it where your
-   project is running (ie. its URL) and where selenium/chromedriver is running
+   project is running (ie. its URL) and where chromedriver is running
    (its URL).
 
 Then, this testing program will interact with your website, verifying that
@@ -42,41 +99,28 @@ submitting forms, etc.
 
 ### Detailed steps
 
-To start Selenium, run a command like
+To start ChromeDriver, a command like
 
 ```
-selenium-server -port 4444
+chromedriver
 ```
 
-or to start ChromeDriver, a command like
+Clearly, you can use whatever port you want. Then, you run the test code like 
 
 ```
-chromedriver --port 4444
-```
-
-Clearly, you can use whatever port you want. Then, you run the test code like this
-
-```
-eventbrite-clone-selenium-tests-$ARCH-$VERSION test "http://localhost:4444/wd/hub" "http://localhost:8000"
-```
-
-if you are using selenium or
-
-```
-eventbrite-clone-selenium-tests-$ARCH-$VERSION test "http://localhost:4444" "http://localhost:8000"
+eventbrite-clone-selenium-tests-$ARCH-$VERSION test "http://localhost:9515" "http://localhost:8000"
 ```
 
 where "eventbrite-clone-selenium-tests-$ARCH-$VERSION" might be
 "eventbrite-clone-selenium-tests-windows-v2.1" or similar.
 
-if you are using ChromeDriver (with which you don't need `/wd/hub`). That will run
+That will run
 the tests against your app running on port `8000` on `localhost`. You can, of
-course, point it *anywhere*, including Cloud9 or Heroku. In my experience,
-ChromeDriver is a little faster than Selenium.
+course, point it *anywhere*, including Cloud9 or Heroku.
 
 ## Expected output
 
-When all the tests pass, you should see this.
+When all the tests pass, you should see something akin to this.
 
 ```
 Home page:
@@ -193,7 +237,7 @@ New event page:
     * Each form element should be labeled with a `label` element with a `for`
       attribute set to the form element's name.
     * `year`, `month`, `day`, `hour`, and `minute` should all be dropdown menus.
-      `year` should only have 2017 and 2018 as options, `month` should have
+      `year` should only have 2018 and 2019 as options, `month` should have
       all of the months' names (not numbers), `day` should have 1-31 (we're
       not checking for valid month/day combinations, though that would be a
       great extension), `hour` should be 0-23, and `minute` should only have
@@ -327,7 +371,7 @@ requirement:
   commits, a branching strategy, tagged releases (for example, at the end of
   sprints), and effective documentation.
 
-## Tips
+## Moar Tips
 
 * All of the tests are in the `tests.go` file in this repository.
 * The CSS selectors we are using to interact with your app are in the
@@ -337,5 +381,5 @@ requirement:
   tests to stop running at the first test that fails.
 * If you want to alter this code, you may! In particular, if you find a bug or
   have an enhancement, I hope you'll send us a pull request. Simply clone with
-  repo into your `$GOPATH`. On my system, this code lives at `/Users/kljensen/go/src/github.com/yale-mgt-656/eventbrite-clone-selenium-tests`.
-  Then run `go get` and `go build`. This was built with go1.8.3.
+  repo into your `$GOPATH`. On my system, this code lives at `/Users/kljensen/go/src/github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests`.
+  Then run `go get` and `go build`. This was built with go1.10.
