@@ -11,7 +11,7 @@ You ought to keep the following caveats in mind:
 
 - This document is not sacrosact. It contains errors and omissions. It will change. Changes will come as we identify errors and omissions and as we add new requirements to the class project.
 - If you like us to make a change to this document or the grading code,
-  please [create an issue](https://github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/issues). If you're particularly bold, you can send us a pull request
+  please [create an issue](https://github.com/yale-mgt-656-fall-2018/eventbrite-clone-tests/issues). If you're particularly bold, you can send us a pull request
   for changes to the grading code---that would be awesome!
 - We will update this document, discuss changes in class, and also post on Piazza when we have changes.
 - Some of the project grade are your weekly reports. Some of the project grade
@@ -71,7 +71,7 @@ preferrably the centralized or "feature branch" workflow.
 
 ## Running the tests
 
-You can find binaries/executables for the testing program in the [releases](https://github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/releases)
+You can find binaries/executables for the testing program in the [releases](https://github.com/yale-mgt-656-fall-2018/eventbrite-clone-tests/releases)
 tab on GitHub. Each release uses semantic versioning, such that "v2.1" indicates
 a minor change from "v2.0"---that change not affecting grading. When the change
 we make affects grading, we'll make a "major" release like "v3.0".
@@ -108,11 +108,11 @@ chromedriver
 Clearly, you can use whatever port you want. Then, you run the test code like 
 
 ```
-eventbrite-clone-selenium-tests-$ARCH-$VERSION test "http://localhost:9515" "http://localhost:8000"
+eventbrite-clone-tests-$ARCH-$VERSION test "http://localhost:9515" "http://localhost:8000"
 ```
 
-where "eventbrite-clone-selenium-tests-$ARCH-$VERSION" might be
-"eventbrite-clone-selenium-tests-windows-v2.1" or similar.
+where "eventbrite-clone-tests-$ARCH-$VERSION" might be
+"eventbrite-clone-tests-windows-v2.1" or similar.
 
 That will run
 the tests against your app running on port `8000` on `localhost`. You can, of
@@ -381,5 +381,5 @@ requirement:
   tests to stop running at the first test that fails.
 * If you want to alter this code, you may! In particular, if you find a bug or
   have an enhancement, I hope you'll send us a pull request. Simply clone with
-  repo into your `$GOPATH`. On my system, this code lives at `/Users/kljensen/go/src/github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests`.
+  repo into your `$GOPATH`. On my system, this code lives at `/Users/kljensen/go/src/github.com/yale-mgt-656-fall-2018/eventbrite-clone-tests`.
   Then run `go get` and `go build`. This was built with go1.10.
