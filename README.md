@@ -10,7 +10,7 @@ A completed version of the project is running at
 You ought to keep the following caveats in mind:
 
 - This document is not sacrosact. It contains errors and omissions. It will change. Changes will come as we identify errors and omissions and as we add new requirements to the class project.
-- If you like us to make a change to this document or the grading code,
+- If you would like us to make a change to this document or the grading code,
   please [create an issue](https://github.com/yale-mgt-656-fall-2018/eventbrite-clone-tests/issues). If you're particularly bold, you can send us a pull request
   for changes to the grading code---that would be awesome!
 - We will update this document, discuss changes in class, and also post on Piazza when we have changes.
