@@ -13,7 +13,7 @@ You ought to keep the following caveats in mind:
 - If you would like us to make a change to this document or the grading code,
   please [create an issue](https://github.com/yale-mgt-656-fall-2018/eventbrite-clone-tests/issues). If you're particularly bold, you can send us a pull request
   for changes to the grading code---that would be awesome!
-- We will update this document, discuss changes in class, and also post on Piazza when we have changes.
+- When we have changes to the class project, we will 1) update this document; 2) discuss changes in class; and, 3) post on Piazza.
 - Some of the project grade are your weekly reports. Some of the project grade
   is the final submission. The final submission will be run through the latest
   iteration of the grading code and that will determin the bulk of the grade.
