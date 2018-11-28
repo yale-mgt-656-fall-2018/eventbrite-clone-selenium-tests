@@ -4,7 +4,7 @@ import (
 	// "math/rand"
 
 	randomdata "github.com/Pallinder/go-randomdata"
-	"github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/tests/selectors"
+	"github.com/yale-mgt-656-fall-2018/eventbrite-clone-tests/tests/selectors"
 )
 
 // RSVP - encapsulates information about a person attending an event.

@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	eventtests "github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/tests"
+	eventtests "github.com/yale-mgt-656-fall-2018/eventbrite-clone-tests/tests"
 
 	"github.com/spf13/cobra"
 )

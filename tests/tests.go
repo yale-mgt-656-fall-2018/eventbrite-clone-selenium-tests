@@ -8,7 +8,7 @@ import (
 	"time"
 
 	goselenium "github.com/bunsenapp/go-selenium"
-	"github.com/yale-mgt-656-fall-2018/eventbrite-clone-selenium-tests/tests/selectors"
+	"github.com/yale-mgt-656-fall-2018/eventbrite-clone-tests/tests/selectors"
 )
 
 // RunForURL - runs the test given a target URL

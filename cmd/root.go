@@ -11,7 +11,7 @@ var cfgFile string
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   "eventbrite-clone-selenium-tests-$ARCH-$VERSION",
+	Use:   "eventbrite-clone-tests-$ARCH-$VERSION",
 	Short: "Runs tests and does grading for mgt656/mgt660 class project",
 	// 	Long: `A longer description that spans multiple lines and likely contains
 	// examples and usage of using your application. For example:
