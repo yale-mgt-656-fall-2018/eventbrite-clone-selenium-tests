@@ -3,6 +3,10 @@ package tests
 import (
 	// "math/rand"
 
+	"crypto/sha256"
+	"fmt"
+	"strings"
+
 	randomdata "github.com/Pallinder/go-randomdata"
 	"github.com/yale-mgt-656-fall-2018/eventbrite-clone-tests/tests/selectors"
 )
@@ -12,6 +16,12 @@ type RSVP struct {
 	email     string
 	flaw      string
 	attribute string
+}
+
+func (r RSVP) confirmationCode(teamNickname string) string {
+	msg := strings.ToLower(fmt.Sprintf("%s-%s", r.email, teamNickname))
+	sum := sha256.Sum256([]byte(msg))
+	return fmt.Sprintf("%x", sum)[:7]
 }
 
 func randomEmail(yaleEmail bool, scramble bool) RSVP {

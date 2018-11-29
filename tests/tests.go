@@ -13,7 +13,7 @@ import (
 
 // RunForURL - runs the test given a target URL
 //
-func RunForURL(seleniumURL string, testURL string, verbose bool, failFast bool, sleepDuration time.Duration) (int, int, error) {
+func RunForURL(teamNickname string, seleniumURL string, testURL string, verbose bool, failFast bool, sleepDuration time.Duration) (int, int, error) {
 	// Create capabilities, driver etc.
 	capabilities := goselenium.Capabilities{}
 	capabilities.SetBrowser(goselenium.ChromeBrowser())
@@ -35,7 +35,7 @@ func RunForURL(seleniumURL string, testURL string, verbose bool, failFast bool, 
 	// Delete the session once this function is completed.
 	defer driver.DeleteSession()
 
-	return Run(driver, strings.TrimSuffix(testURL, "/"), verbose, failFast, sleepDuration)
+	return Run(driver, teamNickname, strings.TrimSuffix(testURL, "/"), verbose, failFast, sleepDuration)
 }
 
 type existanceTest struct {
@@ -61,7 +61,7 @@ func handleC9SplashPage(driver goselenium.WebDriver) (*goselenium.GoResponse, er
 
 // Run - run all tests
 //
-func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast bool, sleepDuration time.Duration) (int, int, error) {
+func Run(driver goselenium.WebDriver, teamNickname string, testURL string, verbose bool, failFast bool, sleepDuration time.Duration) (int, int, error) {
 
 	// Track how many tests passed and failed
 	numPassed := 0
@@ -101,7 +101,7 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 	}
 	checkGoodRsvps := func(eventNum int) {
 		goodRsvps := getGoodRsvps()
-		for _, rsvp := range goodRsvps {
+		for i, rsvp := range goodRsvps {
 			numOriginalRsvps := countCSSSelector(selectors.EventAttendees)
 			msg := "should allow RSVP with " + rsvp.attribute
 			err2 := fillRSVPForm(driver, testURL+"/events/"+fmt.Sprint(eventNum), rsvp)
@@ -109,6 +109,16 @@ func Run(driver goselenium.WebDriver, testURL string, verbose bool, failFast boo
 			numNewRsvps := countCSSSelector(selectors.EventAttendees)
 			result := (numNewRsvps == (numOriginalRsvps + 1))
 			logTestResult(result, err2, msg)
+			if i == 0 {
+				confirmationCode := rsvp.confirmationCode(teamNickname)
+				msg := fmt.Sprintf("RSVP for %s should show confirmation code \"%s\"", rsvp.email, confirmationCode)
+				src, err2 := driver.PageSource()
+				if err2 == nil {
+					result = strings.Contains(src.Source, confirmationCode)
+				}
+				logTestResult(result, err2, msg)
+				time.Sleep(5 * time.Second)
+			}
 		}
 	}
 	checkBadRsvps := func(eventNum int) {
