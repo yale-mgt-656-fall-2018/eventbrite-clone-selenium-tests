@@ -188,7 +188,7 @@ func Run(driver goselenium.WebDriver, teamNickname string, testURL string, verbo
 	}
 
 	homepageTests := []existanceTest{
-		{selectors.PageTitle, "has a title that includes the string \"event\""},
+		// {selectors.PageTitle, "has a title that includes the string \"event\""},
 		{selectors.BootstrapHref, "uses bootstrap"},
 		{selectors.Header, "has a header"},
 		{selectors.Footer, "has a footer"},
