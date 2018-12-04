@@ -30,7 +30,7 @@ You'll need to know the URL for both of these and provide
 them as arguments to this program.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 3 {
-			return errors.New("Requires exactly two arguments: TEAM_NICKNAME SELENIUM_URL and TEST_URL")
+			return errors.New("Requires exactly three arguments: TEAM_NICKNAME SELENIUM_URL and TEST_URL")
 		}
 		nicknameParts := strings.Split(args[0], "-")
 		if len(nicknameParts) != 2 {
